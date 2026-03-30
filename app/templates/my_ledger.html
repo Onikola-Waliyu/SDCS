@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Ledger — Ghost Ledger</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="/static/css/index.css">
+    <style>
+        /* ---- User-specific overrides ---- */
+        .top-header { gap: 12px; flex-direction: column; align-items: flex-start; }
+        @media (min-width: 768px) { .top-header { flex-direction: row; align-items: center; } }
+
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .period-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+        .tab-btn {
+            padding: 7px 16px;
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab-btn:hover { background: var(--glass-hover); color: var(--text-primary); }
+        .tab-btn.active {
+            background: rgba(37, 211, 102, 0.12);
+            color: var(--accent-green);
+            border-color: rgba(37, 211, 102, 0.3);
+        }
+        .date-range-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .date-range-wrap input[type="date"] {
+            padding: 7px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            color-scheme: dark;
+        }
+        .date-range-wrap input[type="date"]:focus { outline: none; border-color: rgba(37,211,102,0.4); }
+        .date-range-wrap span { color: var(--text-muted); font-size: 0.85rem; }
+        .btn-apply {
+            padding: 7px 14px;
+            background: rgba(79,142,247,0.12);
+            color: var(--accent-blue);
+            border: 1px solid rgba(79,142,247,0.25);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            transition: background 0.2s;
+        }
+        .btn-apply:hover { background: rgba(79,142,247,0.22); }
+
+        .phone-display { font-size: 0.85rem; color: var(--text-muted); }
+        .phone-display strong { color: var(--text-secondary); }
+        .logout-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 0.85rem; color: var(--text-muted);
+            background: none; border: none; cursor: pointer;
+            font-family: 'Outfit', sans-serif; padding: 6px 12px;
+            border-radius: 8px; transition: all 0.2s;
+        }
+        .logout-btn:hover { background: var(--glass-hover); color: #f77f7f; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar glass-panel">
+            <div class="brand">
+                <i class="ph ph-ghost"></i>
+                <h2>Ghost Ledger</h2>
+            </div>
+            <nav class="nav-menu">
+                <a href="/my-ledger/dashboard" class="nav-item active" id="nav-dashboard">
+                    <i class="ph ph-squares-four"></i> My Dashboard
+                </a>
+                <a href="#" class="nav-item" id="nav-staff" onclick="showStaffPanel(event)">
+                    <i class="ph ph-users"></i> Team Management
+                </a>
+                <a href="#" class="nav-item" onclick="triggerExport()">
+                    <i class="ph ph-download-simple"></i> Export CSV
+                </a>
+            </nav>
+            <div class="user-profile">
+                <div class="avatar">
+                    <i class="ph ph-user"></i>
+                </div>
+                <div class="info">
+                    <span class="name" id="sidebar-phone">Loading...</span>
+                    <span class="role">Owner</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <div class="greeting">
+                    <h1 id="business-name-header">My Ledger</h1>
+                    <p>Here's your business sales record.</p>
+                </div>
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <span class="phone-display">Logged in as: <strong id="header-phone">...</strong></span>
+                    <form method="POST" action="/api/auth/logout" style="margin:0">
+                        <button type="submit" class="logout-btn"><i class="ph ph-sign-out"></i> Logout</button>
+                    </form>
+                </div>
+            </header>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar glass-panel" style="padding:14px 20px; border-radius:14px;">
+                <div class="period-tabs">
+                    <button class="tab-btn active" data-period="today">Today</button>
+                    <button class="tab-btn" data-period="week">This Week</button>
+                    <button class="tab-btn" data-period="month">This Month</button>
+                    <button class="tab-btn" data-period="all">All Time</button>
+                </div>
+                <div class="date-range-wrap" style="margin-left:auto;">
+                    <span>Custom:</span>
+                    <input type="date" id="fromDate">
+                    <span>→</span>
+                    <input type="date" id="toDate">
+                    <button class="btn-apply" onclick="applyDateRange()"><i class="ph ph-funnel"></i> Apply</button>
+                </div>
+            </div>
+
+            <!-- Stats Widgets -->
+            <section class="stats-grid">
+                <div class="stat-card glass-panel">
+                    <div class="icon-wrap color-green"><i class="ph ph-currency-circle-dollar"></i></div>
+                    <div class="stat-info">
+                        <h3>My Total Revenue</h3>
+                        <h2 id="stat-revenue">₦---</h2>
+                    </div>
+                </div>
+                <div class="stat-card glass-panel">
+                    <div class="icon-wrap color-blue"><i class="ph ph-receipt"></i></div>
+                    <div class="stat-info">
+                        <h3>Total Entries</h3>
+                        <h2 id="stat-count">--</h2>
+                    </div>
+                </div>
+                <div class="stat-card glass-panel">
+                    <div class="icon-wrap color-orange"><i class="ph ph-calendar-check"></i></div>
+                    <div class="stat-info">
+                        <h3>Today's Revenue</h3>
+                        <h2 id="stat-today">₦---</h2>
+                    </div>
+                </div>
+                <div class="stat-card glass-panel">
+                    <div class="icon-wrap color-purple"><i class="ph ph-chart-bar"></i></div>
+                    <div class="stat-info">
+                        <h3>Avg. Sale Value</h3>
+                        <h2 id="stat-avg">₦---</h2>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Ledger Table -->
+            <section class="ledger-section glass-panel">
+                <div class="section-header">
+                    <h2>My Transactions</h2>
+                    <div style="display:flex;gap:10px;align-items:center;">
+                        <div class="search-bar glass-panel" style="padding:8px 14px;">
+                            <i class="ph ph-magnifying-glass"></i>
+                            <input type="text" id="searchInput" placeholder="Search items, customers...">
+                        </div>
+                        <button class="btn btn-primary" onclick="triggerExport()">
+                            <i class="ph ph-download-simple"></i> Download CSV
+                        </button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="ledger-table">
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Item</th>
+                                <th>Qty</th>
+                                <th>Amount</th>
+                                <th>Customer</th>
+                                <th>Recorded By</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ledger-body">
+                            <tr><td colspan="7" class="loading-state">Loading your ledger...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Staff Management Panel (hidden by default) -->
+            <section class="ledger-section glass-panel" id="staff-panel" style="display:none">
+                <div class="section-header">
+                    <h2>Team Management</h2>
+                </div>
+                <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:16px;">
+                    Add sales agents to your business. They can record sales via WhatsApp immediately after being added.
+                </p>
+                <form id="add-staff-form" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;">
+                    <input type="text" id="staff-phone" placeholder="Phone (e.g. 2348012345678)" required
+                        style="flex:1;min-width:200px;padding:10px 14px;border-radius:10px;border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text-primary);font-family:'Outfit',sans-serif;">
+                    <input type="text" id="staff-name" placeholder="Name (optional)"
+                        style="flex:1;min-width:160px;padding:10px 14px;border-radius:10px;border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text-primary);font-family:'Outfit',sans-serif;">
+                    <button type="submit" class="btn btn-primary"><i class="ph ph-user-plus"></i> Add Staff</button>
+                </form>
+                <div id="staff-list"><p style="color:var(--text-muted)">Loading team...</p></div>
+            </section>
+        </main>
+    </div>
+
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+
+    <script>
+        const PHONE = "{{ phone }}";
+        const BUSINESS_NAME = "{{ business_name }}";
+        document.getElementById('sidebar-phone').textContent = '+' + PHONE;
+        document.getElementById('header-phone').textContent = '+' + PHONE;
+        document.getElementById('business-name-header').textContent = BUSINESS_NAME + ' — Ledger';
+
+        function showStaffPanel(e) {
+            e.preventDefault();
+            document.getElementById('staff-panel').style.display = 'block';
+            document.querySelectorAll('.ledger-section')[0].style.display = 'none';
+            document.querySelectorAll('.filter-bar')[0].style.display = 'none';
+            document.querySelectorAll('.stats-grid')[0].style.display = 'none';
+            loadStaff();
+        }
+
+        async function loadStaff() {
+            const res = await fetch('/api/my/staff');
+            const data = await res.json();
+            const container = document.getElementById('staff-list');
+            if (!data.staff.length) {
+                container.innerHTML = '<p style="color:var(--text-muted)">No team members yet. Add one above or via WhatsApp: <code>add staff 234...</code></p>';
+                return;
+            }
+            container.innerHTML = '<table class="ledger-table"><thead><tr><th>Phone</th><th>Name</th><th>Role</th><th>Action</th></tr></thead><tbody>' +
+                data.staff.map(s => `<tr>
+                    <td>+${s.phone}</td>
+                    <td>${s.name || '<em style="color:var(--text-muted)">No name</em>'}</td>
+                    <td><span class="badge">${s.role}</span></td>
+                    <td><button onclick="removeStaff('${s.phone}')" style="background:rgba(247,127,127,0.1);border:1px solid rgba(247,127,127,0.2);color:#f77f7f;padding:5px 10px;border-radius:8px;cursor:pointer;font-family:'Outfit',sans-serif;font-size:0.8rem;">Remove</button></td>
+                </tr>`).join('') +
+            '</tbody></table>';
+        }
+
+        document.getElementById('add-staff-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const phone = document.getElementById('staff-phone').value;
+            const name = document.getElementById('staff-name').value;
+            const body = new FormData();
+            body.append('phone', phone);
+            if (name) body.append('name', name);
+            const res = await fetch('/api/my/staff', { method: 'POST', body });
+            const data = await res.json();
+            if (res.ok) {
+                document.getElementById('staff-phone').value = '';
+                document.getElementById('staff-name').value = '';
+                loadStaff();
+            } else {
+                alert(data.detail || 'Error adding staff member.');
+            }
+        });
+
+        async function removeStaff(phone) {
+            if (!confirm('Remove this team member?')) return;
+            await fetch('/api/my/staff/' + phone, { method: 'DELETE' });
+            loadStaff();
+        }
+    </script>
+    <script src="/static/js/user_dashboard.js"></script>
+</body>
+</html>

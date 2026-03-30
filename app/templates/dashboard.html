@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghost Ledger Dashboard</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="/static/css/index.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar glass-panel">
+            <div class="brand">
+                <i class="ph ph-ghost"></i>
+                <h2>Ghost Ledger</h2>
+            </div>
+            <nav class="nav-menu">
+                <a href="/dashboard" class="nav-item active">
+                    <i class="ph ph-squares-four"></i> Dashboard
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="ph ph-list-dashes"></i> Transactions
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="ph ph-whatsapp-logo"></i> Webhook Logs
+                </a>
+                <a href="/export" class="nav-item" target="_blank" onclick="alert('Downloading CSV...');">
+                    <i class="ph ph-download-simple"></i> Export CSV
+                </a>
+            </nav>
+            <div class="user-profile">
+                <div class="avatar">
+                    <i class="ph ph-user"></i>
+                </div>
+                <div class="info">
+                    <span class="name">Admin</span>
+                    <span class="role">Manager</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <div class="greeting">
+                    <h1>Overview</h1>
+                    <p>Welcome back, here's your ledger summary today.</p>
+                </div>
+                <div class="header-actions">
+                    <div class="search-bar glass-panel">
+                        <i class="ph ph-magnifying-glass"></i>
+                        <input type="text" id="searchInput" placeholder="Search entries, customers...">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Stats Widgets -->
+            <section class="stats-grid">
+                <div class="stat-card glass-panel">
+                    <div class="icon-wrap color-green">
+                        <i class="ph ph-currency-circle-dollar"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Total Revenue</h3>
+                        <h2 id="stat-revenue">₦---</h2>
+                        <span class="trend positive" id="stat-trend"><i class="ph ph-trend-up"></i> --%</span>
+                    </div>
+                </div>
+                <div class="stat-card glass-panel">
+                    <div class="icon-wrap color-blue">
+                        <i class="ph ph-receipt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Total Entries</h3>
+                        <h2 id="stat-count">--</h2>
+                    </div>
+                </div>
+                <div class="stat-card glass-panel">
+                    <div class="icon-wrap color-orange">
+                        <i class="ph ph-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Unique Customers</h3>
+                        <h2 id="stat-customers">--</h2>
+                    </div>
+                </div>
+                <div class="stat-card glass-panel">
+                    <div class="icon-wrap color-purple">
+                        <i class="ph ph-calendar-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Today's Revenue</h3>
+                        <h2 id="stat-today">₦---</h2>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Ledger Table -->
+            <section class="ledger-section glass-panel">
+                <div class="section-header">
+                    <h2>Recent Transactions</h2>
+                    <a href="/export" class="btn btn-primary" target="_blank">
+                        <i class="ph ph-download-simple"></i> Download CSV
+                    </a>
+                </div>
+                <div class="table-container">
+                    <table class="ledger-table">
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Item Description</th>
+                                <th>Qty</th>
+                                <th>Amount</th>
+                                <th>Customer/Phone</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ledger-body">
+                            <!-- Populated by JS -->
+                            <tr>
+                                <td colspan="6" class="loading-state">Loading transactions...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Background Elements for Glassmorphism -->
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
