@@ -214,7 +214,7 @@ async def my_transactions(
     return {"items": result, "total": len(result), "total_revenue": total_revenue}
 
 
-@router.get("/api/my/export")
+@router.get("/api/my/export/csv")
 async def my_export(
     period: str = "all",
     from_date: Optional[str] = None,
@@ -249,6 +249,78 @@ async def my_export(
     filename = f"ledger_{period}_{datetime.now().strftime('%Y%m%d')}.csv"
     return StreamingResponse(buf, media_type="text/csv",
                              headers={"Content-Disposition": f"attachment; filename={filename}"})
+
+
+@router.get("/api/my/export/pdf")
+async def my_export_pdf(
+    period: str = "all",
+    from_date: Optional[str] = None,
+    to_date: Optional[str] = None,
+    owner: User = Depends(_require_owner),
+    session: Session = Depends(get_session),
+):
+    start, end = _date_range_for_period(period)
+    if from_date:
+        start = datetime.fromisoformat(from_date).replace(tzinfo=timezone.utc)
+    if to_date:
+        end = datetime.fromisoformat(to_date).replace(tzinfo=timezone.utc) + timedelta(days=1)
+
+    q = select(Transaction).where(Transaction.business_id == owner.business_id)
+    if start:
+        q = q.where(Transaction.created_at >= start)
+    if end:
+        q = q.where(Transaction.created_at < end)
+    rows = session.exec(q.order_by(desc(Transaction.created_at))).all()
+
+    business = session.get(Business, owner.business_id)
+    business_name = business.name if business else "SDCS Ledger"
+
+    from fpdf import FPDF
+    from fastapi.responses import Response
+
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Helvetica", "B", 16)
+    pdf.cell(0, 10, f"{business_name} - Sales Report", border=0, align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.set_font("Helvetica", "", 10)
+    pdf.cell(0, 10, f"Period: {period.capitalize()} | Total Transactions: {len(rows)}", border=0, align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(5)
+
+    pdf.set_font("Helvetica", "B", 10)
+    pdf.set_fill_color(240, 240, 240)
+    pdf.cell(35, 10, "Date", border=1, fill=True)
+    pdf.cell(60, 10, "Item", border=1, fill=True)
+    pdf.cell(20, 10, "Qty", border=1, fill=True)
+    pdf.cell(40, 10, "Amount", border=1, fill=True)
+    pdf.cell(35, 10, "Recorded By", border=1, fill=True, new_x="LMARGIN", new_y="NEXT")
+
+    pdf.set_font("Helvetica", "", 9)
+    total_amount = 0.0
+    for tx in rows:
+        total_amount += tx.amount
+        date_str = tx.created_at.strftime("%Y-%m-%d")
+        item_str = (tx.item[:32] + '..') if len(tx.item) > 34 else tx.item
+        recorder = session.get(User, tx.recorded_by)
+        recorder_label = recorder.name or tx.recorded_by if recorder else tx.recorded_by
+        phone_str = recorder_label[:14]
+        
+        pdf.cell(35, 10, date_str, border=1)
+        pdf.cell(60, 10, item_str, border=1)
+        
+        qty_val = int(tx.quantity) if float(tx.quantity).is_integer() else tx.quantity
+        pdf.cell(20, 10, f"{qty_val} {tx.unit}", border=1)
+        
+        pdf.cell(40, 10, f"N {tx.amount:,.2f}", border=1)
+        pdf.cell(35, 10, phone_str, border=1, new_x="LMARGIN", new_y="NEXT")
+
+    pdf.ln(5)
+    pdf.set_font("Helvetica", "B", 12)
+    pdf.cell(0, 10, f"Total Amount: N {total_amount:,.2f}", align="R", new_x="LMARGIN", new_y="NEXT")
+
+    pdf_bytes = pdf.output()
+    filename = f"ledger_{period}_{datetime.now().strftime('%Y%m%d')}.pdf"
+    
+    return Response(content=bytes(pdf_bytes), media_type="application/pdf", headers={"Content-Disposition": f"attachment; filename={filename}"})
 
 
 # ── Staff Management API ───────────────────────────────────────────────────────
@@ -299,7 +371,7 @@ async def add_staff(
     import asyncio
     asyncio.create_task(send_whatsapp_message(
         staff_phone,
-        f"👋 You've been added as a sales agent for *{business_name}* on Ghost Ledger!\n\n"
+        f"👋 You've been added as a sales agent for *{business_name}* on SDCS Ledger!\n\n"
         "You can start recording sales right away. Just send a message like:\n"
         "_\"Sold 3 bottles of oil for 6k\"_"
     ))

@@ -285,6 +285,7 @@ html, body {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.89rem;
+  min-width: 750px;
 }
 .ledger-table thead th {
   text-align: left;
@@ -343,7 +344,26 @@ html, body {
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 768px) {
-  .sidebar { display: none; }
-  .main-content { padding: 20px; }
-  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .dashboard-container { flex-direction: column; overflow-y: auto; }
+  .sidebar { 
+    width: 100%; 
+    height: auto; 
+    padding: 15px; 
+    border-right: none; 
+    border-bottom: 1px solid var(--glass-border); 
+    flex-shrink: 0;
+  }
+  .brand { border-bottom: none; padding-bottom: 0; margin-bottom: 10px; justify-content: center; }
+  .nav-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .user-profile { display: none; }
+  .main-content { padding: 15px; overflow-y: visible; flex: none; }
+  .stats-grid { grid-template-columns: 1fr; gap: 12px; }
+  
+  .filter-bar { flex-direction: column; align-items: stretch; gap: 15px; }
+  .period-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+  .date-range-wrap { margin-left: 0 !important; justify-content: space-between; }
+  
+  .top-header { flex-direction: column; align-items: flex-start; }
+  .greeting { text-align: left; }
+  .table-container { min-height: 400px; padding-bottom: 20px; }
 }

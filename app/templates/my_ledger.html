@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Ledger — Ghost Ledger</title>
+    <title>My Ledger — SDCS Ledger</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link rel="stylesheet" href="/static/css/index.css">
@@ -88,7 +88,7 @@
         <aside class="sidebar glass-panel">
             <div class="brand">
                 <i class="ph ph-ghost"></i>
-                <h2>Ghost Ledger</h2>
+                <h2>SDCS Ledger</h2>
             </div>
             <nav class="nav-menu">
                 <a href="/my-ledger/dashboard" class="nav-item active" id="nav-dashboard">
@@ -97,8 +97,11 @@
                 <a href="#" class="nav-item" id="nav-staff" onclick="showStaffPanel(event)">
                     <i class="ph ph-users"></i> Team Management
                 </a>
-                <a href="#" class="nav-item" onclick="triggerExport()">
-                    <i class="ph ph-download-simple"></i> Export CSV
+                <a href="#" class="nav-item" onclick="triggerExport('csv')">
+                    <i class="ph ph-file-csv"></i> Export CSV
+                </a>
+                <a href="#" class="nav-item" onclick="triggerExport('pdf')">
+                    <i class="ph ph-file-pdf"></i> Export PDF
                 </a>
             </nav>
             <div class="user-profile">

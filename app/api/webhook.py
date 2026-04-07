@@ -132,7 +132,7 @@ async def process_incoming_message(phone_number: str, text: str, session: Option
             db.add(new_user)
             db.commit()
             reply = (
-                "👋 Welcome to Ghost Ledger!\n\n"
+                "👋 Welcome to SDCS Ledger!\n\n"
                 "I'll help you track your sales automatically via WhatsApp.\n\n"
                 "To get started, please reply with your *Business Name*:"
             )
@@ -281,7 +281,7 @@ async def handle_add_staff(owner_phone: str, owner: User, clean_text: str, db: S
     business_name = business.name if business else "your business"
     await send_whatsapp_message(
         staff_phone,
-        f"👋 You've been added as a sales agent for *{business_name}* on Ghost Ledger!\n\n"
+        f"👋 You've been added as a sales agent for *{business_name}* on SDCS Ledger!\n\n"
         "You can start recording sales right away. Just send a message like:\n"
         "_\"Sold 3 bottles of oil for 6k\"_"
     )

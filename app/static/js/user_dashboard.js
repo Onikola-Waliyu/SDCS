@@ -100,8 +100,8 @@ function applyDateRange() {
 }
 
 // ── Export ────────────────────────────────────────────────────────────────────
-function triggerExport() {
-  window.location.href = `/api/my/export?${buildQS()}`;
+function triggerExport(type='csv') {
+  window.location.href = `/api/my/export/${type}?${buildQS()}`;
 }
 
 // ── Search ────────────────────────────────────────────────────────────────────

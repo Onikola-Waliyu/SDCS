@@ -27,7 +27,7 @@ async def lifespan(app: FastAPI):
     logger.info("Shutting down.")
 
 
-app = FastAPI(title="SDCS Ghost Ledger MVP", lifespan=lifespan)
+app = FastAPI(title="SDCS Ledger MVP", lifespan=lifespan)
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
