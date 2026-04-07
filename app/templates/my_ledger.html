@@ -7,139 +7,160 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+      }
+    </script>
     <style>
         body { font-family: 'Outfit', sans-serif; }
         .glass-card { background: white; border: 1px solid #e5e7eb; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); }
+        .dark .glass-card { background: #1e293b; border: 1px solid #334155; }
+        #ledger-body td { padding: 1rem 1.5rem; font-size: 0.875rem; color: inherit; }
+        #ledger-body tr { transition: background-color 0.15s; }
+        #ledger-body tr:hover { background-color: #f9fafb; }
+        .dark #ledger-body tr:hover { background-color: #334155; }
+        #ledger-body td:nth-child(2) { font-weight: 500; min-width: 140px; }
+        #ledger-body td:nth-child(4) { color: #059669; font-weight: 700; white-space: nowrap; }
+        .dark #ledger-body td:nth-child(4) { color: #34d399; }
+        @media (max-width: 768px) { #ledger-body td:nth-child(3) { display: none; } }
+        @media (max-width: 640px) { #ledger-body td:nth-child(5) { display: none; } }
     </style>
 </head>
-<body class="h-full flex flex-col md:flex-row overflow-hidden text-gray-800">
+<body class="h-full flex flex-col md:flex-row overflow-hidden text-gray-800 dark:text-gray-200 dark:bg-slate-900 transition-colors duration-300">
     
-    <!-- Mobile Header -->
-    <div class="md:hidden flex items-center justify-between p-4 bg-white border-b border-gray-200">
+    <div class="md:hidden flex items-center justify-between p-4 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
         <div class="flex items-center gap-3">
-            <img src="/static/img/sdcs_logo.png" alt="SDCS" class="h-8 w-auto">
-            <span class="font-bold text-lg text-gray-900 tracking-tight">SDCS Ledger</span>
+            <img src="/static/img/sdcs_logo.png" alt="SDCS" class="h-9 w-9 rounded-full object-cover shadow-sm">
+            <span class="font-bold text-lg text-gray-900 dark:text-white tracking-tight">SDCS Ledger</span>
         </div>
-        <button id="menu-btn" class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+        <button id="menu-btn" class="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg">
             <i class="ph ph-list text-2xl"></i>
         </button>
     </div>
 
-    <!-- Sidebar -->
-    <aside id="sidebar" class="hidden md:flex flex-col w-full md:w-64 bg-white border-r border-gray-200 h-full z-20 absolute md:relative transition-all shadow-xl md:shadow-none">
+    <aside id="sidebar" class="hidden md:flex flex-col w-full md:w-64 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 h-full z-30 absolute top-0 left-0 md:relative transition-all shadow-xl md:shadow-none">
         
-        <div class="p-6 hidden md:flex items-center gap-3 border-b border-gray-100">
-            <img src="/static/img/sdcs_logo.png" alt="SDCS" class="h-9 w-auto">
-            <span class="font-bold text-xl text-gray-900 tracking-tight">SDCS Ledger</span>
+        <div class="p-6 flex items-center justify-between border-b border-gray-100 dark:border-slate-700">
+            <div class="flex items-center gap-3">
+                <img src="/static/img/sdcs_logo.png" alt="SDCS" class="h-10 w-10 rounded-full object-cover shadow-sm">
+                <span class="font-bold text-xl text-gray-900 dark:text-white tracking-tight">SDCS Ledger</span>
+            </div>
+            <button id="close-menu-btn" class="md:hidden p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg">
+                <i class="ph ph-x text-2xl"></i>
+            </button>
         </div>
 
         <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-            <a href="/my-ledger/dashboard" id="nav-dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl text-green-700 bg-green-50 font-medium">
+            <a href="/my-ledger/dashboard" id="nav-dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/30 font-medium transition-colors">
                 <i class="ph ph-squares-four text-xl"></i> My Dashboard
             </a>
-            <a href="#" id="nav-staff" onclick="showStaffPanel(event)" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 font-medium transition">
+            <a href="#" id="nav-staff" onclick="showStaffPanel(event)" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-white font-medium transition-colors">
                 <i class="ph ph-users text-xl"></i> Team Management
             </a>
-            <a href="#" onclick="triggerExport('csv')" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 font-medium transition">
+            <a href="#" onclick="triggerExport('csv')" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-white font-medium transition-colors">
                 <i class="ph ph-file-csv text-xl"></i> Export CSV
             </a>
-            <a href="#" onclick="triggerExport('pdf')" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 font-medium transition">
+            <a href="#" onclick="triggerExport('pdf')" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-white font-medium transition-colors">
                 <i class="ph ph-file-pdf text-xl"></i> Export PDF
             </a>
         </nav>
 
-        <div class="p-4 border-t border-gray-100 m-4 rounded-xl bg-gray-50 flex items-center gap-3">
-            <div class="h-10 w-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center font-bold shrink-0">
+        <div class="px-6 py-2">
+            <button id="theme-toggle" class="flex items-center w-full justify-between px-4 py-3 bg-gray-100 dark:bg-slate-700 rounded-xl text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors">
+                <span class="flex items-center gap-2"><i class="ph ph-moon text-xl dark:hidden"></i><i class="ph ph-sun text-xl hidden dark:block"></i> Theme</span>
+                <span class="text-xs font-bold uppercase tracking-wider dark:hidden">Dark</span>
+                <span class="text-xs font-bold uppercase tracking-wider hidden dark:block">Light</span>
+            </button>
+        </div>
+
+        <div class="p-4 border-t border-gray-100 dark:border-slate-700 m-4 rounded-xl bg-gray-50 dark:bg-slate-700/50 flex items-center gap-3">
+            <div class="h-10 w-10 rounded-full bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400 flex items-center justify-center font-bold shrink-0">
                 <i class="ph ph-user text-lg"></i>
             </div>
             <div class="flex-1 overflow-hidden">
-                <span id="sidebar-phone" class="block text-sm font-bold text-gray-900 truncate">Loading...</span>
-                <span class="block text-xs text-gray-500">Business Owner</span>
+                <span id="sidebar-phone" class="block text-sm font-bold text-gray-900 dark:text-white truncate">Loading...</span>
+                <span class="block text-xs text-gray-500 dark:text-gray-400">Business Owner</span>
             </div>
         </div>
     </aside>
 
-    <!-- Main Content -->
-    <main class="flex-1 flex flex-col h-full overflow-y-auto bg-gray-50 pb-12 w-full">
-        <header class="px-6 py-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white border-b border-gray-200">
+    <main class="flex-1 flex flex-col h-full overflow-y-auto bg-gray-50 dark:bg-slate-900 pb-12 w-full transition-colors duration-300">
+        <header class="px-6 py-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 transition-colors">
             <div>
-                <h1 id="business-name-header" class="text-2xl font-bold text-gray-900 tracking-tight">My Ledger</h1>
-                <p class="text-gray-500 text-sm mt-1">Here's your business sales record.</p>
+                <h1 id="business-name-header" class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">My Ledger</h1>
+                <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Here's your business sales record.</p>
             </div>
-            <div class="flex items-center gap-4 bg-gray-50 px-4 py-2 rounded-lg border border-gray-100 w-full sm:w-auto">
-                <span class="text-sm text-gray-600 truncate">User: <strong id="header-phone" class="text-gray-900">...</strong></span>
+            <div class="flex items-center gap-4 bg-gray-50 dark:bg-slate-700 px-4 py-2 rounded-lg border border-gray-100 dark:border-slate-600 w-full sm:w-auto">
+                <span class="text-sm text-gray-600 dark:text-gray-300 truncate">User: <strong id="header-phone" class="text-gray-900 dark:text-white">...</strong></span>
                 <form method="POST" action="/api/auth/logout" class="m-0 ml-auto sm:ml-0">
-                    <button type="submit" class="text-sm text-red-500 flex items-center gap-1 font-semibold hover:text-red-700 transition"><i class="ph ph-sign-out text-lg"></i> Logout</button>
+                    <button type="submit" class="text-sm text-red-500 dark:text-red-400 flex items-center gap-1 font-semibold hover:text-red-700 dark:hover:text-red-300 transition"><i class="ph ph-sign-out text-lg"></i> Logout</button>
                 </form>
             </div>
         </header>
 
         <div class="p-4 sm:p-6 space-y-6 max-w-7xl mx-auto w-full">
             
-            <!-- Filters -->
             <div class="view-dashboard glass-card p-4 rounded-2xl flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 <div class="period-tabs flex flex-wrap gap-2 w-full lg:w-auto">
                     <button class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold bg-green-600 text-white shadow-sm" data-period="today">Today</button>
-                    <button class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-100" data-period="week">This Week</button>
-                    <button class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-100" data-period="month">This Month</button>
-                    <button class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-100" data-period="all">All Time</button>
+                    <button class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700" data-period="week">This Week</button>
+                    <button class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700" data-period="month">This Month</button>
+                    <button class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700" data-period="all">All Time</button>
                 </div>
-                <div class="date-range-wrap flex flex-wrap items-center gap-3 w-full lg:w-auto bg-gray-50 p-2 rounded-xl border border-gray-100">
-                    <span class="text-sm font-medium text-gray-500">Custom:</span>
-                    <input type="date" id="fromDate" class="bg-white border border-gray-200 rounded text-sm px-2 py-1 text-gray-700 flex-1 min-w-[110px]">
+                <div class="date-range-wrap flex flex-wrap items-center gap-3 w-full lg:w-auto bg-gray-50 dark:bg-slate-800 p-2 rounded-xl border border-gray-100 dark:border-slate-700">
+                    <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Custom:</span>
+                    <input type="date" id="fromDate" class="bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded text-sm px-2 py-1 text-gray-700 dark:text-gray-200 flex-1 min-w-[110px]">
                     <span class="text-gray-400">→</span>
-                    <input type="date" id="toDate" class="bg-white border border-gray-200 rounded text-sm px-2 py-1 text-gray-700 flex-1 min-w-[110px]">
-                    <button class="px-4 py-1.5 bg-white text-green-700 text-sm font-bold rounded-lg flex items-center justify-center gap-1 border border-gray-200 hover:bg-gray-50 w-full sm:w-auto" onclick="applyDateRange()"><i class="ph ph-funnel text-lg"></i> Apply</button>
+                    <input type="date" id="toDate" class="bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded text-sm px-2 py-1 text-gray-700 dark:text-gray-200 flex-1 min-w-[110px]">
+                    <button class="px-4 py-1.5 bg-white dark:bg-slate-600 text-green-700 dark:text-green-400 text-sm font-bold rounded-lg flex items-center justify-center gap-1 border border-gray-200 dark:border-slate-500 hover:bg-gray-50 dark:hover:bg-slate-500 w-full sm:w-auto transition-colors" onclick="applyDateRange()"><i class="ph ph-funnel text-lg"></i> Apply</button>
                 </div>
             </div>
 
-            <!-- Stats -->
             <section class="view-dashboard grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 <div class="glass-card rounded-2xl p-5 flex items-center gap-4 hover:-translate-y-1 transition duration-300">
-                    <div class="h-12 w-12 rounded-xl bg-green-100 text-green-600 flex items-center justify-center text-2xl shrink-0"><i class="ph ph-currency-circle-dollar"></i></div>
-                    <div class="truncate"><p class="text-[11px] uppercase tracking-wider font-bold text-gray-500 truncate">Total Revenue</p>
-                    <h2 id="stat-revenue" class="text-lg sm:text-xl font-bold text-gray-900 mt-1 truncate">₦---</h2></div>
+                    <div class="h-12 w-12 rounded-xl bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 flex items-center justify-center text-2xl shrink-0"><i class="ph ph-currency-circle-dollar"></i></div>
+                    <div class="truncate"><p class="text-[11px] uppercase tracking-wider font-bold text-gray-500 dark:text-gray-400 truncate">Total Revenue</p>
+                    <h2 id="stat-revenue" class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mt-1 truncate">₦---</h2></div>
                 </div>
                 <div class="glass-card rounded-2xl p-5 flex items-center gap-4 hover:-translate-y-1 transition duration-300">
-                    <div class="h-12 w-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl shrink-0"><i class="ph ph-receipt"></i></div>
-                    <div class="truncate"><p class="text-[11px] uppercase tracking-wider font-bold text-gray-500 truncate">Total Entries</p>
-                    <h2 id="stat-count" class="text-lg sm:text-xl font-bold text-gray-900 mt-1 truncate">--</h2></div>
+                    <div class="h-12 w-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center text-2xl shrink-0"><i class="ph ph-receipt"></i></div>
+                    <div class="truncate"><p class="text-[11px] uppercase tracking-wider font-bold text-gray-500 dark:text-gray-400 truncate">Total Entries</p>
+                    <h2 id="stat-count" class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mt-1 truncate">--</h2></div>
                 </div>
                 <div class="glass-card rounded-2xl p-5 flex items-center gap-4 hover:-translate-y-1 transition duration-300">
-                    <div class="h-12 w-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-2xl shrink-0"><i class="ph ph-calendar-check"></i></div>
-                    <div class="truncate"><p class="text-[11px] uppercase tracking-wider font-bold text-gray-500 truncate">Today's Revenue</p>
-                    <h2 id="stat-today" class="text-lg sm:text-xl font-bold text-gray-900 mt-1 truncate">₦---</h2></div>
+                    <div class="h-12 w-12 rounded-xl bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 flex items-center justify-center text-2xl shrink-0"><i class="ph ph-calendar-check"></i></div>
+                    <div class="truncate"><p class="text-[11px] uppercase tracking-wider font-bold text-gray-500 dark:text-gray-400 truncate">Today's Revenue</p>
+                    <h2 id="stat-today" class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mt-1 truncate">₦---</h2></div>
                 </div>
                 <div class="glass-card rounded-2xl p-5 flex items-center gap-4 hover:-translate-y-1 transition duration-300">
-                    <div class="h-12 w-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-2xl shrink-0"><i class="ph ph-chart-bar"></i></div>
-                    <div class="truncate"><p class="text-[11px] uppercase tracking-wider font-bold text-gray-500 truncate">Avg. Sale</p>
-                    <h2 id="stat-avg" class="text-lg sm:text-xl font-bold text-gray-900 mt-1 truncate">₦---</h2></div>
+                    <div class="h-12 w-12 rounded-xl bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 flex items-center justify-center text-2xl shrink-0"><i class="ph ph-chart-bar"></i></div>
+                    <div class="truncate"><p class="text-[11px] uppercase tracking-wider font-bold text-gray-500 dark:text-gray-400 truncate">Avg. Sale</p>
+                    <h2 id="stat-avg" class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mt-1 truncate">₦---</h2></div>
                 </div>
             </section>
 
-            <!-- Table -->
             <section class="view-dashboard glass-card rounded-2xl overflow-hidden flex flex-col">
-                <div class="p-5 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white hidden sm:flex">
-                    <h2 class="text-lg font-bold text-gray-900">Transactions Ledger</h2>
+                <div class="p-5 border-b border-gray-200 dark:border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-800 hidden sm:flex">
+                    <h2 class="text-lg font-bold text-gray-900 dark:text-white">Transactions Ledger</h2>
                     <div class="flex items-center gap-3 w-full sm:w-auto">
-                        <div class="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 flex-1 sm:flex-none">
-                            <i class="ph ph-magnifying-glass text-gray-400 text-lg"></i>
-                            <input type="text" id="searchInput" placeholder="Search..." class="bg-transparent border-none outline-none text-sm text-gray-700 placeholder-gray-400 w-full min-w-[200px]">
+                        <div class="flex items-center gap-2 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-lg px-3 py-2 flex-1 sm:flex-none">
+                            <i class="ph ph-magnifying-glass text-gray-400 dark:text-gray-400 text-lg"></i>
+                            <input type="text" id="searchInput" placeholder="Search..." class="bg-transparent border-none outline-none text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 w-full min-w-[200px]">
                         </div>
                     </div>
                 </div>
-                <!-- Mobile search visible only on small screens -->
-                <div class="p-4 border-b border-gray-200 block sm:hidden bg-white">
-                    <div class="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 w-full">
+                <div class="p-4 border-b border-gray-200 dark:border-slate-700 block sm:hidden bg-white dark:bg-slate-800">
+                    <div class="flex items-center gap-2 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-lg px-3 py-2 w-full">
                         <i class="ph ph-magnifying-glass text-gray-400 text-lg"></i>
-                        <input type="text" id="searchInputMobile" placeholder="Search ledger..." class="bg-transparent border-none outline-none text-sm text-gray-700 placeholder-gray-400 w-full">
+                        <input type="text" id="searchInputMobile" placeholder="Search ledger..." class="bg-transparent border-none outline-none text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 w-full">
                     </div>
                 </div>
 
                 <div class="overflow-x-auto w-full">
-                    <table class="w-full text-left border-collapse min-w-[800px]"> <!-- Force desktop width inside auto-scroll wrapper to guarantee beautiful spacing -->
+                    <table class="w-full text-left border-collapse min-w-[800px]">
                         <thead>
-                            <tr class="bg-gray-50 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200">
+                            <tr class="bg-gray-50 dark:bg-slate-800/50 text-xs uppercase tracking-wider font-bold text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-slate-700">
                                 <th class="py-4 px-6 font-semibold">Date & Time</th>
                                 <th class="py-4 px-6 font-semibold">Item</th>
                                 <th class="py-4 px-6 font-semibold hidden md:table-cell">Qty</th>
@@ -149,36 +170,35 @@
                                 <th class="py-4 px-6 font-semibold text-right">Status</th>
                             </tr>
                         </thead>
-                        <tbody id="ledger-body" class="divide-y divide-gray-100 bg-white">
-                            <tr><td colspan="7" class="text-center py-12 text-gray-500 text-sm">Loading your ledger...</td></tr>
+                        <tbody id="ledger-body" class="bg-white dark:bg-slate-800 divide-y divide-gray-100 dark:divide-slate-700 text-gray-600 dark:text-gray-300">
+                            <tr><td colspan="7" class="text-center py-12 text-gray-500 dark:text-gray-400 text-sm">Loading your ledger...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </section>
 
-            <!-- STAFF PANEL -->
-            <section id="staff-panel" class="hidden glass-card rounded-2xl p-6 bg-white shrink-0">
-                <h2 class="text-xl font-bold text-gray-900 mb-2">Team Management</h2>
-                <p class="text-gray-500 text-sm mb-6 max-w-xl">Add sales agents to automatically record sales to this business. They can interact with the WhatsApp tracker without logging into this dashboard.</p>
+            <section id="staff-panel" class="hidden glass-card rounded-2xl p-6 bg-white dark:bg-slate-800 shrink-0">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Team Management</h2>
+                <p class="text-gray-500 dark:text-gray-400 text-sm mb-6 max-w-xl">Add sales agents to automatically record sales to this business. They can interact with the WhatsApp tracker without logging into this dashboard.</p>
                 
-                <form id="add-staff-form" class="flex flex-col md:flex-row gap-3 mb-8 bg-gray-50 p-4 sm:p-5 rounded-xl border border-gray-100 w-full md:w-fit">
-                    <input type="text" id="staff-phone" placeholder="Phone (e.g. 2348...)" required class="flex-1 md:w-[220px] border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-green-500 hover:border-gray-400 outline-none transition">
-                    <input type="text" id="staff-name" placeholder="Name (optional)" class="flex-1 md:w-[180px] border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-green-500 hover:border-gray-400 outline-none transition">
-                    <button type="submit" class="bg-green-600 text-white font-bold text-sm px-6 py-2.5 rounded-lg border border-transparent shadow-sm hover:bg-green-700 transition flex items-center justify-center gap-2"><i class="ph ph-user-plus text-lg"></i> Add Staff</button>
+                <form id="add-staff-form" class="flex flex-col md:flex-row gap-3 mb-8 bg-gray-50 dark:bg-slate-700/50 p-4 sm:p-5 rounded-xl border border-gray-100 dark:border-slate-600 w-full md:w-fit">
+                    <input type="text" id="staff-phone" placeholder="Phone (e.g. 2348...)" required class="flex-1 md:w-[220px] bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-lg px-4 py-2.5 text-sm dark:text-white focus:ring-2 focus:ring-green-500 outline-none transition">
+                    <input type="text" id="staff-name" placeholder="Name (optional)" class="flex-1 md:w-[180px] bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-lg px-4 py-2.5 text-sm dark:text-white focus:ring-2 focus:ring-green-500 outline-none transition">
+                    <button type="submit" class="bg-green-600 text-white font-bold text-sm px-6 py-2.5 rounded-lg hover:bg-green-700 transition flex items-center justify-center gap-2"><i class="ph ph-user-plus text-lg"></i> Add Staff</button>
                 </form>
 
-                <div class="overflow-x-auto border border-gray-100 rounded-xl">
+                <div class="overflow-x-auto border border-gray-100 dark:border-slate-700 rounded-xl">
                     <table class="w-full text-left border-collapse min-w-[500px]">
-                        <thead class="bg-gray-50 border-b border-gray-100">
+                        <thead class="bg-gray-50 dark:bg-slate-800 border-b border-gray-100 dark:border-slate-700">
                             <tr>
-                                <th class="py-3 px-5 text-xs font-bold text-gray-500 uppercase tracking-wider">Phone</th>
-                                <th class="py-3 px-5 text-xs font-bold text-gray-500 uppercase tracking-wider">Name</th>
-                                <th class="py-3 px-5 text-xs font-bold text-gray-500 uppercase tracking-wider">Role</th>
-                                <th class="py-3 px-5 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">Action</th>
+                                <th class="py-3 px-5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Phone</th>
+                                <th class="py-3 px-5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Name</th>
+                                <th class="py-3 px-5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Role</th>
+                                <th class="py-3 px-5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-right">Action</th>
                             </tr>
                         </thead>
-                        <tbody id="staff-list" class="divide-y divide-gray-50 bg-white">
-                            <tr><td colspan="4" class="text-center py-8 text-gray-400 text-sm">Loading team...</td></tr>
+                        <tbody id="staff-list" class="divide-y divide-gray-50 dark:divide-slate-700 bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300">
+                            <tr><td colspan="4" class="text-center py-8 text-gray-400 dark:text-gray-500 text-sm">Loading team...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -186,7 +206,6 @@
         </div>
     </main>
 
-    <!-- Essential logic bindings mapped securely to your custom static js -->
     <script>
         const PHONE = "{{ phone }}";
         const BUSINESS_NAME = "{{ business_name }}";
@@ -194,27 +213,59 @@
         document.getElementById('header-phone').textContent = '+' + PHONE;
         document.getElementById('business-name-header').textContent = BUSINESS_NAME;
 
-        // Custom JS mapping for active states
+        // Dark Mode Logic
+        const html = document.documentElement;
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setTheme(isDark) {
+            if (isDark) {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        
+        let savedTheme = localStorage.getItem('theme');
+        if (!savedTheme) {
+            savedTheme = 'dark'; // User explicitly prefers default to be dark! Let's set default dark mode
+        }
+        if (savedTheme === 'dark') {
+            setTheme(true);
+        } else {
+            setTheme(false);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            setTheme(!html.classList.contains('dark'));
+        });
+
+        // Tabs
         const tabBtns = document.querySelectorAll('.tab-btn');
         tabBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 tabBtns.forEach(b => {
                     b.classList.remove('bg-green-600', 'text-white', 'shadow-sm');
-                    b.classList.add('text-gray-600', 'hover:bg-gray-100');
+                    b.classList.add('text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-100', 'dark:hover:bg-slate-700');
                 });
                 btn.classList.add('bg-green-600', 'text-white', 'shadow-sm');
-                btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
+                btn.classList.remove('text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-100', 'dark:hover:bg-slate-700');
             });
         });
 
         // Mobile Menu toggle
+        const sb = document.getElementById('sidebar');
         document.getElementById('menu-btn').addEventListener('click', () => {
-            const sb = document.getElementById('sidebar');
-            sb.classList.toggle('hidden');
-            sb.classList.toggle('flex');
+            sb.classList.remove('hidden');
+            sb.classList.add('flex');
+        });
+        document.getElementById('close-menu-btn').addEventListener('click', () => {
+            sb.classList.add('hidden');
+            sb.classList.remove('flex');
         });
 
-        // Search Input Linker
+        // Search Mapper
         const searchMobile = document.getElementById('searchInputMobile');
         const searchDesktop = document.getElementById('searchInput');
         if(searchMobile && searchDesktop) {
@@ -230,17 +281,19 @@
             document.querySelectorAll('.view-dashboard').forEach(el => el.classList.add('hidden'));
             
             document.getElementById('nav-dashboard').classList.replace('bg-green-50', 'hover:bg-gray-50');
+            document.getElementById('nav-dashboard').classList.replace('dark:bg-green-900/30', 'dark:hover:bg-slate-700');
             document.getElementById('nav-dashboard').classList.replace('text-green-700', 'text-gray-600');
+            document.getElementById('nav-dashboard').classList.replace('dark:text-green-400', 'dark:text-gray-400');
             
             document.getElementById('nav-staff').classList.replace('hover:bg-gray-50', 'bg-green-50');
+            document.getElementById('nav-staff').classList.replace('dark:hover:bg-slate-700', 'dark:bg-green-900/30');
             document.getElementById('nav-staff').classList.replace('text-gray-600', 'text-green-700');
+            document.getElementById('nav-staff').classList.replace('dark:text-gray-400', 'dark:text-green-400');
 
-            // auto close sidebar on mobile after click
             if(window.innerWidth < 768) {
-                document.getElementById('sidebar').classList.add('hidden');
-                document.getElementById('sidebar').classList.remove('flex');
+                sb.classList.add('hidden');
+                sb.classList.remove('flex');
             }
-
             loadStaff();
         }
 
@@ -249,14 +302,14 @@
             const data = await res.json();
             const container = document.getElementById('staff-list');
             if (!data.staff.length) {
-                container.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-gray-500 text-sm">No team members yet. Use the form above to add one.</td></tr>';
+                container.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-gray-500 dark:text-gray-400 text-sm">No team members yet. Use the form above to add one.</td></tr>';
                 return;
             }
-            container.innerHTML = data.staff.map(s => `<tr class="hover:bg-gray-50 transition">
-                    <td class="py-3 px-5 text-sm text-gray-900 font-medium">+${s.phone}</td>
-                    <td class="py-3 px-5 text-sm text-gray-600">${s.name || '<em class="text-gray-400">No name</em>'}</td>
-                    <td class="py-3 px-5"><span class="bg-gray-100 border border-gray-200 text-gray-600 text-xs font-bold px-2 py-1 rounded w-fit">${s.role}</span></td>
-                    <td class="py-3 px-5 text-right"><button onclick="removeStaff('${s.phone}')" class="text-red-500 hover:text-red-700 font-semibold text-sm px-3 py-1 rounded-md hover:bg-red-50 border border-transparent hover:border-red-200 transition">Remove</button></td>
+            container.innerHTML = data.staff.map(s => `<tr class="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition border-t border-gray-50 dark:border-slate-700">
+                    <td class="py-3 px-5 text-sm text-gray-900 dark:text-white font-medium">+${s.phone}</td>
+                    <td class="py-3 px-5 text-sm text-gray-600 dark:text-gray-300">${s.name || '<em class="text-gray-400 dark:text-gray-500">No name</em>'}</td>
+                    <td class="py-3 px-5"><span class="bg-gray-100 dark:bg-slate-600 border border-gray-200 dark:border-slate-500 text-gray-600 dark:text-gray-300 text-xs font-bold px-2 py-1 rounded w-fit">${s.role}</span></td>
+                    <td class="py-3 px-5 text-right"><button onclick="removeStaff('${s.phone}')" class="text-red-500 dark:text-red-400 hover:text-red-700 font-semibold text-sm px-3 py-1 rounded-md hover:bg-red-50 dark:hover:bg-red-900/30 border border-transparent hover:border-red-200 dark:hover:border-red-900/50 transition">Remove</button></td>
                 </tr>`).join('');
         }
 
@@ -284,28 +337,6 @@
             loadStaff();
         }
     </script>
-
-    <style>
-        /* Automatically styles the raw HTML injected by user_dashboard.js */
-        #ledger-body td {
-            padding: 1rem 1.5rem;
-            font-size: 0.875rem;
-            color: #4b5563; /* text-gray-600 */
-        }
-        #ledger-body tr { transition: background-color 0.15s; }
-        #ledger-body tr:hover { background-color: #f9fafb; }
-        #ledger-body td:nth-child(2) { color: #111827; font-weight: 500; min-width: 140px; }
-        #ledger-body td:nth-child(4) { color: #059669; font-weight: 700; white-space: nowrap; }
-        
-        /* Hide QTY and Customer cols on small screens via CSS nth-child mapping matching the thead */
-        @media (max-width: 768px) {
-            #ledger-body td:nth-child(3) { display: none; }
-        }
-        @media (max-width: 640px) {
-            #ledger-body td:nth-child(5) { display: none; }
-        }
-    </style>
-    
     <script src="/static/js/user_dashboard.js"></script>
 </body>
 </html>
