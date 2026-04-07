@@ -1,9 +1,10 @@
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
-
+import os
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
 from app.api.webhook import router as webhook_router
 from app.api.dashboard import router as dashboard_router
@@ -29,6 +30,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="SDCS Ghost Ledger MVP", lifespan=lifespan)
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
+templates = Jinja2Templates(directory="app/templates")
 
 app.include_router(webhook_router)
 app.include_router(dashboard_router)
@@ -36,5 +38,9 @@ app.include_router(user_router)
 
 
 @app.get("/")
-def read_root():
-    return {"status": "SDCS MVP is running"}
+def read_root(request: Request):
+    bot_phone = os.getenv("WHATSAPP_PHONE_NUMBER", "234...")
+    return templates.TemplateResponse(
+        "index.html",
+        {"request": request, "bot_phone": bot_phone}
+    )
