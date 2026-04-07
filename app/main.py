@@ -41,6 +41,7 @@ app.include_router(user_router)
 def read_root(request: Request):
     bot_phone = os.getenv("WHATSAPP_PHONE_NUMBER", "234...")
     return templates.TemplateResponse(
-        "index.html",
-        {"request": request, "bot_phone": bot_phone}
+        request=request,
+        name="index.html",
+        context={"bot_phone": bot_phone}
     )
