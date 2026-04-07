@@ -1,254 +1,246 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="bg-gray-50 h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Ledger — SDCS Ledger</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link rel="stylesheet" href="/static/css/index.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* ---- User-specific overrides ---- */
-        .top-header { gap: 12px; flex-direction: column; align-items: flex-start; }
-        @media (min-width: 768px) { .top-header { flex-direction: row; align-items: center; } }
-
-        .filter-bar {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .period-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
-        .tab-btn {
-            padding: 7px 16px;
-            border-radius: 8px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border: 1px solid var(--glass-border);
-            background: var(--glass-bg);
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .tab-btn:hover { background: var(--glass-hover); color: var(--text-primary); }
-        .tab-btn.active {
-            background: rgba(37, 211, 102, 0.12);
-            color: var(--accent-green);
-            border-color: rgba(37, 211, 102, 0.3);
-        }
-        .date-range-wrap {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .date-range-wrap input[type="date"] {
-            padding: 7px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--glass-border);
-            background: var(--glass-bg);
-            color: var(--text-primary);
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.85rem;
-            cursor: pointer;
-            color-scheme: dark;
-        }
-        .date-range-wrap input[type="date"]:focus { outline: none; border-color: rgba(37,211,102,0.4); }
-        .date-range-wrap span { color: var(--text-muted); font-size: 0.85rem; }
-        .btn-apply {
-            padding: 7px 14px;
-            background: rgba(79,142,247,0.12);
-            color: var(--accent-blue);
-            border: 1px solid rgba(79,142,247,0.25);
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: 'Outfit', sans-serif;
-            transition: background 0.2s;
-        }
-        .btn-apply:hover { background: rgba(79,142,247,0.22); }
-
-        .phone-display { font-size: 0.85rem; color: var(--text-muted); }
-        .phone-display strong { color: var(--text-secondary); }
-        .logout-btn {
-            display: inline-flex; align-items: center; gap: 6px;
-            font-size: 0.85rem; color: var(--text-muted);
-            background: none; border: none; cursor: pointer;
-            font-family: 'Outfit', sans-serif; padding: 6px 12px;
-            border-radius: 8px; transition: all 0.2s;
-        }
-        .logout-btn:hover { background: var(--glass-hover); color: #f77f7f; }
+        body { font-family: 'Outfit', sans-serif; }
+        .glass-card { background: white; border: 1px solid #e5e7eb; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); }
     </style>
 </head>
-<body>
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <aside class="sidebar glass-panel">
-            <div class="brand">
-                <i class="ph ph-ghost"></i>
-                <h2>SDCS Ledger</h2>
-            </div>
-            <nav class="nav-menu">
-                <a href="/my-ledger/dashboard" class="nav-item active" id="nav-dashboard">
-                    <i class="ph ph-squares-four"></i> My Dashboard
-                </a>
-                <a href="#" class="nav-item" id="nav-staff" onclick="showStaffPanel(event)">
-                    <i class="ph ph-users"></i> Team Management
-                </a>
-                <a href="#" class="nav-item" onclick="triggerExport('csv')">
-                    <i class="ph ph-file-csv"></i> Export CSV
-                </a>
-                <a href="#" class="nav-item" onclick="triggerExport('pdf')">
-                    <i class="ph ph-file-pdf"></i> Export PDF
-                </a>
-            </nav>
-            <div class="user-profile">
-                <div class="avatar">
-                    <i class="ph ph-user"></i>
-                </div>
-                <div class="info">
-                    <span class="name" id="sidebar-phone">Loading...</span>
-                    <span class="role">Owner</span>
-                </div>
-            </div>
-        </aside>
+<body class="h-full flex flex-col md:flex-row overflow-hidden text-gray-800">
+    
+    <!-- Mobile Header -->
+    <div class="md:hidden flex items-center justify-between p-4 bg-white border-b border-gray-200">
+        <div class="flex items-center gap-3">
+            <img src="/static/img/sdcs_logo.png" alt="SDCS" class="h-8 w-auto">
+            <span class="font-bold text-lg text-gray-900 tracking-tight">SDCS Ledger</span>
+        </div>
+        <button id="menu-btn" class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+            <i class="ph ph-list text-2xl"></i>
+        </button>
+    </div>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="top-header">
-                <div class="greeting">
-                    <h1 id="business-name-header">My Ledger</h1>
-                    <p>Here's your business sales record.</p>
-                </div>
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <span class="phone-display">Logged in as: <strong id="header-phone">...</strong></span>
-                    <form method="POST" action="/api/auth/logout" style="margin:0">
-                        <button type="submit" class="logout-btn"><i class="ph ph-sign-out"></i> Logout</button>
-                    </form>
-                </div>
-            </header>
+    <!-- Sidebar -->
+    <aside id="sidebar" class="hidden md:flex flex-col w-full md:w-64 bg-white border-r border-gray-200 h-full z-20 absolute md:relative transition-all shadow-xl md:shadow-none">
+        
+        <div class="p-6 hidden md:flex items-center gap-3 border-b border-gray-100">
+            <img src="/static/img/sdcs_logo.png" alt="SDCS" class="h-9 w-auto">
+            <span class="font-bold text-xl text-gray-900 tracking-tight">SDCS Ledger</span>
+        </div>
 
-            <!-- Filter Bar -->
-            <div class="filter-bar glass-panel" style="padding:14px 20px; border-radius:14px;">
-                <div class="period-tabs">
-                    <button class="tab-btn active" data-period="today">Today</button>
-                    <button class="tab-btn" data-period="week">This Week</button>
-                    <button class="tab-btn" data-period="month">This Month</button>
-                    <button class="tab-btn" data-period="all">All Time</button>
+        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+            <a href="/my-ledger/dashboard" id="nav-dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl text-green-700 bg-green-50 font-medium">
+                <i class="ph ph-squares-four text-xl"></i> My Dashboard
+            </a>
+            <a href="#" id="nav-staff" onclick="showStaffPanel(event)" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 font-medium transition">
+                <i class="ph ph-users text-xl"></i> Team Management
+            </a>
+            <a href="#" onclick="triggerExport('csv')" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 font-medium transition">
+                <i class="ph ph-file-csv text-xl"></i> Export CSV
+            </a>
+            <a href="#" onclick="triggerExport('pdf')" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 font-medium transition">
+                <i class="ph ph-file-pdf text-xl"></i> Export PDF
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-gray-100 m-4 rounded-xl bg-gray-50 flex items-center gap-3">
+            <div class="h-10 w-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center font-bold shrink-0">
+                <i class="ph ph-user text-lg"></i>
+            </div>
+            <div class="flex-1 overflow-hidden">
+                <span id="sidebar-phone" class="block text-sm font-bold text-gray-900 truncate">Loading...</span>
+                <span class="block text-xs text-gray-500">Business Owner</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full overflow-y-auto bg-gray-50 pb-12 w-full">
+        <header class="px-6 py-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white border-b border-gray-200">
+            <div>
+                <h1 id="business-name-header" class="text-2xl font-bold text-gray-900 tracking-tight">My Ledger</h1>
+                <p class="text-gray-500 text-sm mt-1">Here's your business sales record.</p>
+            </div>
+            <div class="flex items-center gap-4 bg-gray-50 px-4 py-2 rounded-lg border border-gray-100 w-full sm:w-auto">
+                <span class="text-sm text-gray-600 truncate">User: <strong id="header-phone" class="text-gray-900">...</strong></span>
+                <form method="POST" action="/api/auth/logout" class="m-0 ml-auto sm:ml-0">
+                    <button type="submit" class="text-sm text-red-500 flex items-center gap-1 font-semibold hover:text-red-700 transition"><i class="ph ph-sign-out text-lg"></i> Logout</button>
+                </form>
+            </div>
+        </header>
+
+        <div class="p-4 sm:p-6 space-y-6 max-w-7xl mx-auto w-full">
+            
+            <!-- Filters -->
+            <div class="view-dashboard glass-card p-4 rounded-2xl flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                <div class="period-tabs flex flex-wrap gap-2 w-full lg:w-auto">
+                    <button class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold bg-green-600 text-white shadow-sm" data-period="today">Today</button>
+                    <button class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-100" data-period="week">This Week</button>
+                    <button class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-100" data-period="month">This Month</button>
+                    <button class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-100" data-period="all">All Time</button>
                 </div>
-                <div class="date-range-wrap" style="margin-left:auto;">
-                    <span>Custom:</span>
-                    <input type="date" id="fromDate">
-                    <span>→</span>
-                    <input type="date" id="toDate">
-                    <button class="btn-apply" onclick="applyDateRange()"><i class="ph ph-funnel"></i> Apply</button>
+                <div class="date-range-wrap flex flex-wrap items-center gap-3 w-full lg:w-auto bg-gray-50 p-2 rounded-xl border border-gray-100">
+                    <span class="text-sm font-medium text-gray-500">Custom:</span>
+                    <input type="date" id="fromDate" class="bg-white border border-gray-200 rounded text-sm px-2 py-1 text-gray-700 flex-1 min-w-[110px]">
+                    <span class="text-gray-400">→</span>
+                    <input type="date" id="toDate" class="bg-white border border-gray-200 rounded text-sm px-2 py-1 text-gray-700 flex-1 min-w-[110px]">
+                    <button class="px-4 py-1.5 bg-white text-green-700 text-sm font-bold rounded-lg flex items-center justify-center gap-1 border border-gray-200 hover:bg-gray-50 w-full sm:w-auto" onclick="applyDateRange()"><i class="ph ph-funnel text-lg"></i> Apply</button>
                 </div>
             </div>
 
-            <!-- Stats Widgets -->
-            <section class="stats-grid">
-                <div class="stat-card glass-panel">
-                    <div class="icon-wrap color-green"><i class="ph ph-currency-circle-dollar"></i></div>
-                    <div class="stat-info">
-                        <h3>My Total Revenue</h3>
-                        <h2 id="stat-revenue">₦---</h2>
-                    </div>
+            <!-- Stats -->
+            <section class="view-dashboard grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                <div class="glass-card rounded-2xl p-5 flex items-center gap-4 hover:-translate-y-1 transition duration-300">
+                    <div class="h-12 w-12 rounded-xl bg-green-100 text-green-600 flex items-center justify-center text-2xl shrink-0"><i class="ph ph-currency-circle-dollar"></i></div>
+                    <div class="truncate"><p class="text-[11px] uppercase tracking-wider font-bold text-gray-500 truncate">Total Revenue</p>
+                    <h2 id="stat-revenue" class="text-lg sm:text-xl font-bold text-gray-900 mt-1 truncate">₦---</h2></div>
                 </div>
-                <div class="stat-card glass-panel">
-                    <div class="icon-wrap color-blue"><i class="ph ph-receipt"></i></div>
-                    <div class="stat-info">
-                        <h3>Total Entries</h3>
-                        <h2 id="stat-count">--</h2>
-                    </div>
+                <div class="glass-card rounded-2xl p-5 flex items-center gap-4 hover:-translate-y-1 transition duration-300">
+                    <div class="h-12 w-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl shrink-0"><i class="ph ph-receipt"></i></div>
+                    <div class="truncate"><p class="text-[11px] uppercase tracking-wider font-bold text-gray-500 truncate">Total Entries</p>
+                    <h2 id="stat-count" class="text-lg sm:text-xl font-bold text-gray-900 mt-1 truncate">--</h2></div>
                 </div>
-                <div class="stat-card glass-panel">
-                    <div class="icon-wrap color-orange"><i class="ph ph-calendar-check"></i></div>
-                    <div class="stat-info">
-                        <h3>Today's Revenue</h3>
-                        <h2 id="stat-today">₦---</h2>
-                    </div>
+                <div class="glass-card rounded-2xl p-5 flex items-center gap-4 hover:-translate-y-1 transition duration-300">
+                    <div class="h-12 w-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-2xl shrink-0"><i class="ph ph-calendar-check"></i></div>
+                    <div class="truncate"><p class="text-[11px] uppercase tracking-wider font-bold text-gray-500 truncate">Today's Revenue</p>
+                    <h2 id="stat-today" class="text-lg sm:text-xl font-bold text-gray-900 mt-1 truncate">₦---</h2></div>
                 </div>
-                <div class="stat-card glass-panel">
-                    <div class="icon-wrap color-purple"><i class="ph ph-chart-bar"></i></div>
-                    <div class="stat-info">
-                        <h3>Avg. Sale Value</h3>
-                        <h2 id="stat-avg">₦---</h2>
-                    </div>
+                <div class="glass-card rounded-2xl p-5 flex items-center gap-4 hover:-translate-y-1 transition duration-300">
+                    <div class="h-12 w-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-2xl shrink-0"><i class="ph ph-chart-bar"></i></div>
+                    <div class="truncate"><p class="text-[11px] uppercase tracking-wider font-bold text-gray-500 truncate">Avg. Sale</p>
+                    <h2 id="stat-avg" class="text-lg sm:text-xl font-bold text-gray-900 mt-1 truncate">₦---</h2></div>
                 </div>
             </section>
 
-            <!-- Ledger Table -->
-            <section class="ledger-section glass-panel">
-                <div class="section-header">
-                    <h2>My Transactions</h2>
-                    <div style="display:flex;gap:10px;align-items:center;">
-                        <div class="search-bar glass-panel" style="padding:8px 14px;">
-                            <i class="ph ph-magnifying-glass"></i>
-                            <input type="text" id="searchInput" placeholder="Search items, customers...">
+            <!-- Table -->
+            <section class="view-dashboard glass-card rounded-2xl overflow-hidden flex flex-col">
+                <div class="p-5 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white hidden sm:flex">
+                    <h2 class="text-lg font-bold text-gray-900">Transactions Ledger</h2>
+                    <div class="flex items-center gap-3 w-full sm:w-auto">
+                        <div class="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 flex-1 sm:flex-none">
+                            <i class="ph ph-magnifying-glass text-gray-400 text-lg"></i>
+                            <input type="text" id="searchInput" placeholder="Search..." class="bg-transparent border-none outline-none text-sm text-gray-700 placeholder-gray-400 w-full min-w-[200px]">
                         </div>
-                        <button class="btn btn-primary" onclick="triggerExport()">
-                            <i class="ph ph-download-simple"></i> Download CSV
-                        </button>
                     </div>
                 </div>
-                <div class="table-container">
-                    <table class="ledger-table">
+                <!-- Mobile search visible only on small screens -->
+                <div class="p-4 border-b border-gray-200 block sm:hidden bg-white">
+                    <div class="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 w-full">
+                        <i class="ph ph-magnifying-glass text-gray-400 text-lg"></i>
+                        <input type="text" id="searchInputMobile" placeholder="Search ledger..." class="bg-transparent border-none outline-none text-sm text-gray-700 placeholder-gray-400 w-full">
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto w-full">
+                    <table class="w-full text-left border-collapse min-w-[800px]"> <!-- Force desktop width inside auto-scroll wrapper to guarantee beautiful spacing -->
                         <thead>
-                            <tr>
-                                <th>Date & Time</th>
-                                <th>Item</th>
-                                <th>Qty</th>
-                                <th>Amount</th>
-                                <th>Customer</th>
-                                <th>Recorded By</th>
-                                <th>Status</th>
+                            <tr class="bg-gray-50 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200">
+                                <th class="py-4 px-6 font-semibold">Date & Time</th>
+                                <th class="py-4 px-6 font-semibold">Item</th>
+                                <th class="py-4 px-6 font-semibold hidden md:table-cell">Qty</th>
+                                <th class="py-4 px-6 font-semibold">Amount</th>
+                                <th class="py-4 px-6 font-semibold hidden sm:table-cell">Customer</th>
+                                <th class="py-4 px-6 font-semibold">Agent</th>
+                                <th class="py-4 px-6 font-semibold text-right">Status</th>
                             </tr>
                         </thead>
-                        <tbody id="ledger-body">
-                            <tr><td colspan="7" class="loading-state">Loading your ledger...</td></tr>
+                        <tbody id="ledger-body" class="divide-y divide-gray-100 bg-white">
+                            <tr><td colspan="7" class="text-center py-12 text-gray-500 text-sm">Loading your ledger...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </section>
 
-            <!-- Staff Management Panel (hidden by default) -->
-            <section class="ledger-section glass-panel" id="staff-panel" style="display:none">
-                <div class="section-header">
-                    <h2>Team Management</h2>
-                </div>
-                <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:16px;">
-                    Add sales agents to your business. They can record sales via WhatsApp immediately after being added.
-                </p>
-                <form id="add-staff-form" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;">
-                    <input type="text" id="staff-phone" placeholder="Phone (e.g. 2348012345678)" required
-                        style="flex:1;min-width:200px;padding:10px 14px;border-radius:10px;border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text-primary);font-family:'Outfit',sans-serif;">
-                    <input type="text" id="staff-name" placeholder="Name (optional)"
-                        style="flex:1;min-width:160px;padding:10px 14px;border-radius:10px;border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text-primary);font-family:'Outfit',sans-serif;">
-                    <button type="submit" class="btn btn-primary"><i class="ph ph-user-plus"></i> Add Staff</button>
+            <!-- STAFF PANEL -->
+            <section id="staff-panel" class="hidden glass-card rounded-2xl p-6 bg-white shrink-0">
+                <h2 class="text-xl font-bold text-gray-900 mb-2">Team Management</h2>
+                <p class="text-gray-500 text-sm mb-6 max-w-xl">Add sales agents to automatically record sales to this business. They can interact with the WhatsApp tracker without logging into this dashboard.</p>
+                
+                <form id="add-staff-form" class="flex flex-col md:flex-row gap-3 mb-8 bg-gray-50 p-4 sm:p-5 rounded-xl border border-gray-100 w-full md:w-fit">
+                    <input type="text" id="staff-phone" placeholder="Phone (e.g. 2348...)" required class="flex-1 md:w-[220px] border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-green-500 hover:border-gray-400 outline-none transition">
+                    <input type="text" id="staff-name" placeholder="Name (optional)" class="flex-1 md:w-[180px] border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-green-500 hover:border-gray-400 outline-none transition">
+                    <button type="submit" class="bg-green-600 text-white font-bold text-sm px-6 py-2.5 rounded-lg border border-transparent shadow-sm hover:bg-green-700 transition flex items-center justify-center gap-2"><i class="ph ph-user-plus text-lg"></i> Add Staff</button>
                 </form>
-                <div id="staff-list"><p style="color:var(--text-muted)">Loading team...</p></div>
+
+                <div class="overflow-x-auto border border-gray-100 rounded-xl">
+                    <table class="w-full text-left border-collapse min-w-[500px]">
+                        <thead class="bg-gray-50 border-b border-gray-100">
+                            <tr>
+                                <th class="py-3 px-5 text-xs font-bold text-gray-500 uppercase tracking-wider">Phone</th>
+                                <th class="py-3 px-5 text-xs font-bold text-gray-500 uppercase tracking-wider">Name</th>
+                                <th class="py-3 px-5 text-xs font-bold text-gray-500 uppercase tracking-wider">Role</th>
+                                <th class="py-3 px-5 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="staff-list" class="divide-y divide-gray-50 bg-white">
+                            <tr><td colspan="4" class="text-center py-8 text-gray-400 text-sm">Loading team...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </section>
-        </main>
-    </div>
+        </div>
+    </main>
 
-    <div class="gradient-orb orb-1"></div>
-    <div class="gradient-orb orb-2"></div>
-
+    <!-- Essential logic bindings mapped securely to your custom static js -->
     <script>
         const PHONE = "{{ phone }}";
         const BUSINESS_NAME = "{{ business_name }}";
         document.getElementById('sidebar-phone').textContent = '+' + PHONE;
         document.getElementById('header-phone').textContent = '+' + PHONE;
-        document.getElementById('business-name-header').textContent = BUSINESS_NAME + ' — Ledger';
+        document.getElementById('business-name-header').textContent = BUSINESS_NAME;
+
+        // Custom JS mapping for active states
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => {
+                    b.classList.remove('bg-green-600', 'text-white', 'shadow-sm');
+                    b.classList.add('text-gray-600', 'hover:bg-gray-100');
+                });
+                btn.classList.add('bg-green-600', 'text-white', 'shadow-sm');
+                btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
+            });
+        });
+
+        // Mobile Menu toggle
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            const sb = document.getElementById('sidebar');
+            sb.classList.toggle('hidden');
+            sb.classList.toggle('flex');
+        });
+
+        // Search Input Linker
+        const searchMobile = document.getElementById('searchInputMobile');
+        const searchDesktop = document.getElementById('searchInput');
+        if(searchMobile && searchDesktop) {
+            searchMobile.addEventListener('input', (e) => {
+                searchDesktop.value = e.target.value;
+                searchDesktop.dispatchEvent(new Event('input'));
+            });
+        }
 
         function showStaffPanel(e) {
             e.preventDefault();
-            document.getElementById('staff-panel').style.display = 'block';
-            document.querySelectorAll('.ledger-section')[0].style.display = 'none';
-            document.querySelectorAll('.filter-bar')[0].style.display = 'none';
-            document.querySelectorAll('.stats-grid')[0].style.display = 'none';
+            document.getElementById('staff-panel').classList.remove('hidden');
+            document.querySelectorAll('.view-dashboard').forEach(el => el.classList.add('hidden'));
+            
+            document.getElementById('nav-dashboard').classList.replace('bg-green-50', 'hover:bg-gray-50');
+            document.getElementById('nav-dashboard').classList.replace('text-green-700', 'text-gray-600');
+            
+            document.getElementById('nav-staff').classList.replace('hover:bg-gray-50', 'bg-green-50');
+            document.getElementById('nav-staff').classList.replace('text-gray-600', 'text-green-700');
+
+            // auto close sidebar on mobile after click
+            if(window.innerWidth < 768) {
+                document.getElementById('sidebar').classList.add('hidden');
+                document.getElementById('sidebar').classList.remove('flex');
+            }
+
             loadStaff();
         }
 
@@ -257,17 +249,15 @@
             const data = await res.json();
             const container = document.getElementById('staff-list');
             if (!data.staff.length) {
-                container.innerHTML = '<p style="color:var(--text-muted)">No team members yet. Add one above or via WhatsApp: <code>add staff 234...</code></p>';
+                container.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-gray-500 text-sm">No team members yet. Use the form above to add one.</td></tr>';
                 return;
             }
-            container.innerHTML = '<table class="ledger-table"><thead><tr><th>Phone</th><th>Name</th><th>Role</th><th>Action</th></tr></thead><tbody>' +
-                data.staff.map(s => `<tr>
-                    <td>+${s.phone}</td>
-                    <td>${s.name || '<em style="color:var(--text-muted)">No name</em>'}</td>
-                    <td><span class="badge">${s.role}</span></td>
-                    <td><button onclick="removeStaff('${s.phone}')" style="background:rgba(247,127,127,0.1);border:1px solid rgba(247,127,127,0.2);color:#f77f7f;padding:5px 10px;border-radius:8px;cursor:pointer;font-family:'Outfit',sans-serif;font-size:0.8rem;">Remove</button></td>
-                </tr>`).join('') +
-            '</tbody></table>';
+            container.innerHTML = data.staff.map(s => `<tr class="hover:bg-gray-50 transition">
+                    <td class="py-3 px-5 text-sm text-gray-900 font-medium">+${s.phone}</td>
+                    <td class="py-3 px-5 text-sm text-gray-600">${s.name || '<em class="text-gray-400">No name</em>'}</td>
+                    <td class="py-3 px-5"><span class="bg-gray-100 border border-gray-200 text-gray-600 text-xs font-bold px-2 py-1 rounded w-fit">${s.role}</span></td>
+                    <td class="py-3 px-5 text-right"><button onclick="removeStaff('${s.phone}')" class="text-red-500 hover:text-red-700 font-semibold text-sm px-3 py-1 rounded-md hover:bg-red-50 border border-transparent hover:border-red-200 transition">Remove</button></td>
+                </tr>`).join('');
         }
 
         document.getElementById('add-staff-form').addEventListener('submit', async (e) => {
@@ -294,6 +284,28 @@
             loadStaff();
         }
     </script>
+
+    <style>
+        /* Automatically styles the raw HTML injected by user_dashboard.js */
+        #ledger-body td {
+            padding: 1rem 1.5rem;
+            font-size: 0.875rem;
+            color: #4b5563; /* text-gray-600 */
+        }
+        #ledger-body tr { transition: background-color 0.15s; }
+        #ledger-body tr:hover { background-color: #f9fafb; }
+        #ledger-body td:nth-child(2) { color: #111827; font-weight: 500; min-width: 140px; }
+        #ledger-body td:nth-child(4) { color: #059669; font-weight: 700; white-space: nowrap; }
+        
+        /* Hide QTY and Customer cols on small screens via CSS nth-child mapping matching the thead */
+        @media (max-width: 768px) {
+            #ledger-body td:nth-child(3) { display: none; }
+        }
+        @media (max-width: 640px) {
+            #ledger-body td:nth-child(5) { display: none; }
+        }
+    </style>
+    
     <script src="/static/js/user_dashboard.js"></script>
 </body>
 </html>
