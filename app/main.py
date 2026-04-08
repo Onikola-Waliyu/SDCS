@@ -2,7 +2,8 @@ import logging
 from contextlib import asynccontextmanager
 
 import os
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, BackgroundTasks
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import text
@@ -14,7 +15,7 @@ from app.db.models import create_db_and_tables, engine
 
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 logger = logging.getLogger(__name__)
 
@@ -24,11 +25,28 @@ async def lifespan(app: FastAPI):
     """Application lifespan: create DB tables on startup."""
     logger.info("Starting up — initialising database tables.")
     create_db_and_tables()
+    # Safely inject the new status column for existing legacy DB instances without dropping data
+    try:
+        with engine.connect() as conn:
+            conn.execute(text('ALTER TABLE "transaction" ADD COLUMN IF NOT EXISTS status VARCHAR DEFAULT \'recorded\';'))
+            conn.commit()
+            logger.info("Successfully migrated status column.")
+    except Exception as e:
+        logger.info(f"Migration suppressed: {e}")
     yield
     logger.info("Shutting down.")
 
 
 app = FastAPI(title="SDCS Ledger MVP", lifespan=lifespan)
+
+# Setup CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
