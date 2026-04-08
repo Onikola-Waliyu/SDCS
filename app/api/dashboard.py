@@ -8,7 +8,7 @@ from fastapi.templating import Jinja2Templates
 from sqlmodel import Session, select, func
 from sqlalchemy import desc
 
-from app.db.models import Transaction, get_session
+from app.db.models import Transaction, Business, User, UserRole, get_session
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -146,3 +146,98 @@ async def admin_export_pdf(session: Session = Depends(get_session), _=Depends(ad
 
     pdf_bytes = pdf.output()
     return Response(content=bytes(pdf_bytes), media_type="application/pdf", headers={"Content-Disposition": "attachment; filename=sdcs_global_report.pdf"})
+
+@router.get("/api/admin/businesses")
+async def api_admin_businesses(session: Session = Depends(get_session), _=Depends(admin_auth)):
+    businesses = session.exec(select(Business).order_by(desc(Business.created_at))).all()
+    
+    result = []
+    for b in businesses:
+        owner = session.exec(select(User).where(User.business_id == b.id, User.role == UserRole.OWNER)).first()
+        staff = session.exec(select(User).where(User.business_id == b.id, User.role == UserRole.STAFF)).all()
+        
+        rev = session.exec(select(func.sum(Transaction.amount)).where(Transaction.business_id == b.id)).one() or 0.0
+        tx_count = session.exec(select(func.count(Transaction.id)).where(Transaction.business_id == b.id)).one() or 0
+        
+        staff_data = [{"name": s.name or "Agent", "phone": s.phone_number} for s in staff]
+        
+        result.append({
+            "id": b.id,
+            "name": b.name,
+            "created_at": b.created_at.isoformat(),
+            "owner_name": owner.name if owner and owner.name else "Unknown",
+            "owner_phone": owner.phone_number if owner else "N/A",
+            "staff": staff_data,
+            "total_revenue": rev,
+            "total_transactions": tx_count
+        })
+        
+    return {"businesses": result}
+
+@router.get("/api/admin/businesses/{business_id}/export/csv")
+async def admin_business_export_csv(business_id: int, session: Session = Depends(get_session), _=Depends(admin_auth)):
+    business = session.get(Business, business_id)
+    if not business:
+        raise HTTPException(status_code=404, detail="Business not found")
+        
+    from app.utils.exporter import generate_transactions_csv
+    statement = select(Transaction).where(Transaction.business_id == business_id).order_by(Transaction.created_at.desc())
+    transactions = session.exec(statement).all()
+    csv_data = generate_transactions_csv(transactions)
+    return Response(
+        content=csv_data,
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename={business.name.replace(' ', '_')}_transactions.csv"}
+    )
+    
+@router.get("/api/admin/businesses/{business_id}/export/pdf")
+async def admin_business_export_pdf(business_id: int, session: Session = Depends(get_session), _=Depends(admin_auth)):
+    business = session.get(Business, business_id)
+    if not business:
+        raise HTTPException(status_code=404, detail="Business not found")
+        
+    statement = select(Transaction).where(Transaction.business_id == business_id).order_by(desc(Transaction.created_at))
+    rows = session.exec(statement).all()
+
+    from fpdf import FPDF
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Helvetica", "B", 16)
+    pdf.cell(0, 10, f"{business.name} - Sales Report", border=0, align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.set_font("Helvetica", "", 10)
+    pdf.cell(0, 10, f"Generated on: {datetime.now().strftime('%Y-%m-%d')} | Total Trx: {len(rows)}", border=0, align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(5)
+
+    pdf.set_font("Helvetica", "B", 8)
+    pdf.set_fill_color(240, 240, 240)
+    pdf.cell(30, 10, "Date", border=1, fill=True)
+    pdf.cell(50, 10, "Item", border=1, fill=True)
+    pdf.cell(15, 10, "Qty", border=1, fill=True)
+    pdf.cell(35, 10, "Amount", border=1, fill=True)
+    pdf.cell(30, 10, "Customer", border=1, fill=True)
+    pdf.cell(30, 10, "Agent ID", border=1, fill=True, new_x="LMARGIN", new_y="NEXT")
+
+    pdf.set_font("Helvetica", "", 7)
+    total_amount = 0.0
+    for tx in rows:
+        total_amount += tx.amount
+        pdf.cell(30, 8, tx.created_at.strftime("%Y-%m-%d %H:%M"), border=1)
+        pdf.cell(50, 8, (tx.item[:28] + '..') if len(tx.item) > 30 else tx.item, border=1)
+        qty_val = int(tx.quantity) if float(tx.quantity).is_integer() else tx.quantity
+        pdf.cell(15, 8, f"{qty_val} {tx.unit}", border=1)
+        pdf.cell(35, 8, f"N {tx.amount:,.2f}", border=1)
+        cust = (tx.customer[:16] + '..') if tx.customer and len(tx.customer) > 18 else (tx.customer or "")
+        pdf.cell(30, 8, cust, border=1)
+        
+        from app.db.models import User
+        recorder = session.get(User, tx.recorded_by)
+        agent_label = (recorder.name or tx.recorded_by) if recorder else tx.recorded_by
+        agent = (agent_label[:16] + '..') if len(agent_label) > 18 else agent_label
+        pdf.cell(30, 8, agent, border=1, new_x="LMARGIN", new_y="NEXT")
+
+    pdf.ln(5)
+    pdf.set_font("Helvetica", "B", 12)
+    pdf.cell(0, 10, f"Gross Amount: N {total_amount:,.2f}", align="R", new_x="LMARGIN", new_y="NEXT")
+
+    pdf_bytes = pdf.output()
+    return Response(content=bytes(pdf_bytes), media_type="application/pdf", headers={"Content-Disposition": f"attachment; filename={business.name.replace(' ', '_')}_report.pdf"})

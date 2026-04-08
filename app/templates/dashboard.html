@@ -62,8 +62,11 @@
         </div>
 
         <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-            <a href="/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/30 font-medium transition-colors">
+            <a href="#" id="nav-dashboard" onclick="showDashboard(event)" class="flex items-center gap-3 px-4 py-3 rounded-xl text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/30 font-medium transition-colors">
                 <i class="ph ph-squares-four text-xl"></i> Global Dashboard
+            </a>
+            <a href="#" id="nav-businesses" onclick="showBusinesses(event)" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-white font-medium transition-colors">
+                <i class="ph ph-buildings text-xl"></i> Registered Businesses
             </a>
             <a href="/api/admin/export/csv" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-white font-medium transition-colors">
                 <i class="ph ph-file-csv text-xl"></i> Export Global CSV
@@ -135,7 +138,7 @@
             </section>
 
             <!-- Table -->
-            <section class="glass-card rounded-2xl overflow-hidden flex flex-col">
+            <section class="view-dashboard glass-card rounded-2xl overflow-hidden flex flex-col">
                 <div class="p-5 border-b border-gray-200 dark:border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-800 hidden sm:flex">
                     <h2 class="text-lg font-bold text-gray-900 dark:text-white">Recent Global Transactions</h2>
                     <div class="flex items-center gap-3 w-full sm:w-auto">
@@ -146,14 +149,14 @@
                     </div>
                 </div>
                 <!-- Mobile search -->
-                <div class="p-4 border-b border-gray-200 dark:border-slate-700 block sm:hidden bg-white dark:bg-slate-800">
+                <div class="p-4 border-b border-gray-200 dark:border-slate-700 block sm:hidden bg-white dark:bg-slate-800 view-dashboard">
                     <div class="flex items-center gap-2 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-lg px-3 py-2 w-full">
                         <i class="ph ph-magnifying-glass text-gray-400 text-lg"></i>
                         <input type="text" id="searchInputMobile" placeholder="Search globally..." class="bg-transparent border-none outline-none text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 w-full">
                     </div>
                 </div>
 
-                <div class="overflow-x-auto w-full">
+                <div class="overflow-x-auto w-full view-dashboard">
                     <table class="w-full text-left border-collapse min-w-[800px]">
                         <thead>
                             <tr class="bg-gray-50 dark:bg-slate-800/50 text-xs uppercase tracking-wider font-bold text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-slate-700">
@@ -167,6 +170,29 @@
                         </thead>
                         <tbody id="ledger-body" class="bg-white dark:bg-slate-800 divide-y divide-gray-100 dark:divide-slate-700 text-gray-600 dark:text-gray-300">
                             <tr><td colspan="6" class="text-center py-12 text-gray-500 dark:text-gray-400 text-sm">Loading transactions...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- Businesses Panel -->
+            <section id="businesses-panel" class="hidden glass-card rounded-2xl p-6 bg-white dark:bg-slate-800 shrink-0">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Registered Businesses Directory</h2>
+                <p class="text-gray-500 dark:text-gray-400 text-sm mb-6 max-w-xl">View all platform business accounts, access agent hierarchies, check overall financial standing, and trigger scoped export tasks.</p>
+
+                <div class="overflow-x-auto border border-gray-100 dark:border-slate-700 rounded-xl mt-4">
+                    <table class="w-full text-left border-collapse min-w-[800px]">
+                        <thead class="bg-gray-50 dark:bg-slate-800 border-b border-gray-100 dark:border-slate-700">
+                            <tr>
+                                <th class="py-3 px-5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Business Name</th>
+                                <th class="py-3 px-5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Owner</th>
+                                <th class="py-3 px-5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-center">Active Agents</th>
+                                <th class="py-3 px-5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Gross Rev. / Trx.</th>
+                                <th class="py-3 px-5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="businesses-list" class="divide-y divide-gray-50 dark:divide-slate-700 bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300">
+                            <tr><td colspan="5" class="text-center py-8 text-gray-400 dark:text-gray-500 text-sm">Querying business registry...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -222,6 +248,49 @@
                 searchDesktop.value = e.target.value;
                 searchDesktop.dispatchEvent(new Event('input'));
             });
+        }
+
+        // Navigation Tab toggles
+        function showBusinesses(e) {
+            e.preventDefault();
+            document.getElementById('businesses-panel').classList.remove('hidden');
+            document.querySelectorAll('.view-dashboard').forEach(el => el.classList.add('hidden'));
+            
+            document.getElementById('nav-dashboard').classList.replace('bg-green-50', 'hover:bg-gray-50');
+            document.getElementById('nav-dashboard').classList.replace('dark:bg-green-900/30', 'dark:hover:bg-slate-700');
+            document.getElementById('nav-dashboard').classList.replace('text-green-700', 'text-gray-600');
+            document.getElementById('nav-dashboard').classList.replace('dark:text-green-400', 'dark:text-gray-400');
+            
+            document.getElementById('nav-businesses').classList.replace('hover:bg-gray-50', 'bg-green-50');
+            document.getElementById('nav-businesses').classList.replace('dark:hover:bg-slate-700', 'dark:bg-green-900/30');
+            document.getElementById('nav-businesses').classList.replace('text-gray-600', 'text-green-700');
+            document.getElementById('nav-businesses').classList.replace('dark:text-gray-400', 'dark:text-green-400');
+
+            if(window.innerWidth < 768) {
+                sb.classList.add('hidden');
+                sb.classList.remove('flex');
+            }
+        }
+
+        function showDashboard(e) {
+            if(e) e.preventDefault();
+            document.getElementById('businesses-panel').classList.add('hidden');
+            document.querySelectorAll('.view-dashboard').forEach(el => el.classList.remove('hidden'));
+            
+            document.getElementById('nav-businesses').classList.replace('bg-green-50', 'hover:bg-gray-50');
+            document.getElementById('nav-businesses').classList.replace('dark:bg-green-900/30', 'dark:hover:bg-slate-700');
+            document.getElementById('nav-businesses').classList.replace('text-green-700', 'text-gray-600');
+            document.getElementById('nav-businesses').classList.replace('dark:text-green-400', 'dark:text-gray-400');
+            
+            document.getElementById('nav-dashboard').classList.replace('hover:bg-gray-50', 'bg-green-50');
+            document.getElementById('nav-dashboard').classList.replace('dark:hover:bg-slate-700', 'dark:bg-green-900/30');
+            document.getElementById('nav-dashboard').classList.replace('text-gray-600', 'text-green-700');
+            document.getElementById('nav-dashboard').classList.replace('dark:text-gray-400', 'dark:text-green-400');
+
+            if(window.innerWidth < 768) {
+                sb.classList.add('hidden');
+                sb.classList.remove('flex');
+            }
         }
     </script>
     <script src="/static/js/dashboard.js"></script>
