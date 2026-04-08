@@ -61,13 +61,17 @@ function renderRows(rows) {
     return;
   }
   tbody.innerHTML = rows.map(tx => `
-    <tr>
-      <td>${fmt.date(tx.created_at)}</td>
-      <td>${escHtml(tx.item || '—')}</td>
-      <td>${tx.quantity != null ? tx.quantity + (tx.unit ? ' ' + tx.unit : '') : '—'}</td>
-      <td>${fmt.currency(tx.amount)}</td>
-      <td>${escHtml(tx.customer || tx.phone_number || '—')}</td>
-      <td><span class="badge badge-success">Recorded</span></td>
+    <tr class="${tx.status === 'returned' ? 'opacity-80 bg-red-50/40 dark:bg-red-900/10' : ''}">
+      <td class="py-4 px-6">${fmt.date(tx.created_at)}</td>
+      <td class="py-4 px-6">${escHtml(tx.item || '—')}</td>
+      <td class="py-4 px-6 hidden md:table-cell">${tx.quantity != null ? tx.quantity + (tx.unit ? ' ' + tx.unit : '') : '—'}</td>
+      <td class="py-4 px-6 ${tx.status === 'returned' ? 'line-through text-red-500 font-medium' : 'font-medium'}">${fmt.currency(tx.amount)}</td>
+      <td class="py-4 px-6">${escHtml(tx.customer || tx.phone_number || '—')}</td>
+      <td class="py-4 px-6 text-right">
+          ${tx.status === 'returned' 
+            ? '<span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">Refunded</span>'
+            : '<span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">Recorded</span>'}
+      </td>
     </tr>
   `).join('');
 }

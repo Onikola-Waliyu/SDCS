@@ -51,14 +51,23 @@ async function loadTransactions() {
       return;
     }
     tbody.innerHTML = data.items.map(tx => `
-      <tr>
+      <tr class="${tx.status === 'returned' ? 'opacity-80 bg-red-50/40 dark:bg-red-900/10' : ''}">
         <td>${fmt.date(tx.created_at)}</td>
         <td>${esc(tx.item || '—')}</td>
         <td>${tx.quantity != null ? tx.quantity + (tx.unit ? ' ' + tx.unit : '') : '—'}</td>
-        <td>${fmt.currency(tx.amount)}</td>
+        <td class="${tx.status === 'returned' ? 'line-through text-red-500 font-medium' : 'font-medium'}">${fmt.currency(tx.amount)}</td>
         <td>${esc(tx.customer || '—')}</td>
         <td>${esc(tx.recorded_by || '—')}</td>
-        <td><span class="badge badge-success">Recorded</span></td>
+        <td>
+            <div class="flex items-center gap-2">
+                ${tx.status === 'returned' 
+                    ? '<span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">Refunded</span>'
+                    : '<span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">Recorded</span>'}
+                <button onclick="toggleTxStatus(${tx.id})" title="Toggle Return Status" class="p-1 text-gray-400 hover:text-gray-900 hover:bg-gray-200 dark:hover:bg-slate-600 dark:hover:text-white rounded transition">
+                    <i class="ph ph-arrow-u-down-left text-lg"></i>
+                </button>
+            </div>
+        </td>
       </tr>
     `).join('');
   } catch(e) {
@@ -71,6 +80,21 @@ function esc(str) {
   const d = document.createElement('div');
   d.appendChild(document.createTextNode(String(str)));
   return d.innerHTML;
+}
+
+// ── Status Engine ─────────────────────────────────────────────────────────────
+async function toggleTxStatus(txId) {
+    if (!confirm("Confirm changing this transaction's status?")) return;
+    try {
+        const res = await fetch(`/api/my/transactions/${txId}/toggle-status`, { method: "POST" });
+        if (res.ok) {
+            refresh();
+        } else {
+            alert("Status change failed.");
+        }
+    } catch(e) {
+        console.error("Status change error", e);
+    }
 }
 
 // ── Period Tab Switching ──────────────────────────────────────────────────────

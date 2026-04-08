@@ -54,6 +54,7 @@ class Transaction(SQLModel, table=True):
     unit: str = Field(default="unit")
     amount: float
     customer: Optional[str] = Field(default=None)
+    status: str = Field(default="recorded")
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 

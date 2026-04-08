@@ -60,12 +60,15 @@ async def api_get_transactions(
 
 @router.get("/api/stats")
 async def api_get_stats(session: Session = Depends(get_session), _=Depends(admin_auth)):
-    total_revenue = session.exec(select(func.sum(Transaction.amount))).one() or 0.0
-    total_transactions = session.exec(select(func.count(Transaction.id))).one() or 0
+    total_revenue = session.exec(select(func.sum(Transaction.amount)).where(Transaction.status == "recorded")).one() or 0.0
+    total_transactions = session.exec(select(func.count(Transaction.id)).where(Transaction.status == "recorded")).one() or 0
     total_customers = session.exec(select(func.count(func.distinct(Transaction.business_id)))).one() or 0
     
     today_start = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
-    today_revenue = session.exec(select(func.sum(Transaction.amount)).where(Transaction.created_at >= today_start)).one() or 0.0
+    today_revenue = session.exec(select(func.sum(Transaction.amount)).where(
+        Transaction.created_at >= today_start,
+        Transaction.status == "recorded"
+    )).one() or 0.0
 
     yesterday_start = today_start - timedelta(days=1)
     yesterday_revenue = session.exec(select(func.sum(Transaction.amount)).where(
@@ -156,8 +159,12 @@ async def api_admin_businesses(session: Session = Depends(get_session), _=Depend
         owner = session.exec(select(User).where(User.business_id == b.id, User.role == UserRole.OWNER)).first()
         staff = session.exec(select(User).where(User.business_id == b.id, User.role == UserRole.STAFF)).all()
         
-        rev = session.exec(select(func.sum(Transaction.amount)).where(Transaction.business_id == b.id)).one() or 0.0
-        tx_count = session.exec(select(func.count(Transaction.id)).where(Transaction.business_id == b.id)).one() or 0
+        rev = session.exec(select(func.sum(Transaction.amount)).where(
+            Transaction.business_id == b.id, Transaction.status == "recorded"
+        )).one() or 0.0
+        tx_count = session.exec(select(func.count(Transaction.id)).where(
+            Transaction.business_id == b.id, Transaction.status == "recorded"
+        )).one() or 0
         
         staff_data = [{"name": s.name or "Agent", "phone": s.phone_number} for s in staff]
         

@@ -5,11 +5,12 @@ import os
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from sqlalchemy import text
 
 from app.api.webhook import router as webhook_router
 from app.api.dashboard import router as dashboard_router
 from app.api.user import router as user_router
-from app.db.models import create_db_and_tables
+from app.db.models import create_db_and_tables, engine
 
 logging.basicConfig(
     level=logging.INFO,

@@ -198,8 +198,17 @@ async def process_incoming_message(phone_number: str, text: str, session: Option
             return
 
         # ── SALE RECORDING ─────────────────────────────────────────────────
-        parsed_data = parse_sale_message(text)
-        if parsed_data:
+        lines = [line.strip() for line in text.split('\n') if line.strip()]
+        success_count = 0
+        total_added = 0.0
+        reply_lines = []
+        
+        for line in lines:
+            parsed_data = parse_sale_message(line)
+            if not parsed_data:
+                reply_lines.append(f"❌ '{line[:15]}...' (Invalid format)")
+                continue
+                
             transaction = Transaction(
                 business_id=user.business_id,
                 recorded_by=phone_number,
@@ -208,21 +217,30 @@ async def process_incoming_message(phone_number: str, text: str, session: Option
                 unit=parsed_data["unit"],
                 amount=parsed_data["amount"],
                 customer=parsed_data.get("customer"),
+                status="recorded"
             )
             db.add(transaction)
-            db.commit()
-
+            success_count += 1
+            total_added += parsed_data["amount"]
+            
             q = float(transaction.quantity)
             qty_str = f"{int(q)}" if q.is_integer() else f"{q}"
-
-            reply = f"✅ Recorded: {qty_str} {transaction.unit} of {transaction.item} – ₦{transaction.amount:,.2f}"
-            if transaction.customer:
-                reply += f" (Customer: {transaction.customer})"
-            await send_whatsapp_message(phone_number, reply)
+            
+            rec_str = f"✅ {qty_str} {transaction.unit} {transaction.item} - ₦{transaction.amount:,.2f}"
+            reply_lines.append(rec_str)
+            
+        db.commit()
+        
+        if success_count > 0:
+            header = f"🚀 Successfully processed {success_count} item(s):\n\n"
+            footer = f"\n\n💰 Total Added: ₦{total_added:,.2f}\nType 'today' or 'summary' to check metrics."
+            final_msg = header + "\n".join(reply_lines) + footer
+            await send_whatsapp_message(phone_number, final_msg)
         else:
-            reply = "❌ Sorry, I didn't understand that. Try: 'Sold 2 rice 5k'"
-            await send_whatsapp_message(phone_number, reply)
-
+            await send_whatsapp_message(
+                phone_number,
+                "❌ Couldn't parse any sales.\n\nFormat each line like:\n*5 Rice 3000 Cash*\n\n(Qty | Item | Total Amount | Payment Method)"
+            )
 
 # ---------------------------------------------------------------------------
 # Staff management

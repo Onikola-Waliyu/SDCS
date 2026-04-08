@@ -141,7 +141,7 @@ async def my_stats(
         end = datetime.fromisoformat(to_date).replace(tzinfo=timezone.utc) + timedelta(days=1)
 
     def make_query(agg):
-        q = select(agg).where(Transaction.business_id == owner.business_id)
+        q = select(agg).where(Transaction.business_id == owner.business_id, Transaction.status == "recorded")
         if start:
             q = q.where(Transaction.created_at >= start)
         if end:
@@ -156,6 +156,7 @@ async def my_stats(
     today_revenue = session.exec(
         select(func.sum(Transaction.amount)).where(
             Transaction.business_id == owner.business_id,
+            Transaction.status == "recorded",
             Transaction.created_at >= today_start,
         )
     ).one() or 0.0
@@ -206,12 +207,29 @@ async def my_transactions(
             "unit": tx.unit,
             "amount": tx.amount,
             "customer": tx.customer,
+            "status": tx.status or "recorded",
             "recorded_by": recorder.name or tx.recorded_by if recorder else tx.recorded_by,
             "created_at": tx.created_at.isoformat(),
         })
 
-    total_revenue = sum(r["amount"] for r in result)
+    total_revenue = sum(r["amount"] for r in result if (r["status"] or "recorded") == "recorded")
     return {"items": result, "total": len(result), "total_revenue": total_revenue}
+
+
+@router.post("/api/my/transactions/{tx_id}/toggle-status")
+async def toggle_tx_status(
+    tx_id: int,
+    owner: User = Depends(_require_owner),
+    session: Session = Depends(get_session),
+):
+    tx = session.get(Transaction, tx_id)
+    if not tx or tx.business_id != owner.business_id:
+        raise HTTPException(status_code=404, detail="Transaction not found")
+        
+    tx.status = "returned" if tx.status == "recorded" else "recorded"
+    session.add(tx)
+    session.commit()
+    return {"status": "ok", "new_state": tx.status}
 
 
 @router.get("/api/my/export/csv")
