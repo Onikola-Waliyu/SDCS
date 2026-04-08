@@ -1,140 +1,229 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" class="bg-gray-50 h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ghost Ledger Dashboard</title>
-    <!-- Google Fonts -->
+    <title>Master Admin — SDCS Ledger</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link rel="stylesheet" href="/static/css/index.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+      }
+    </script>
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        .glass-card { background: white; border: 1px solid #e5e7eb; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); }
+        .dark .glass-card { background: #1e293b; border: 1px solid #334155; }
+        #ledger-body td { padding: 1rem 1.5rem; font-size: 0.875rem; color: inherit; }
+        #ledger-body tr { transition: background-color 0.15s; }
+        #ledger-body tr:hover { background-color: #f9fafb; }
+        .dark #ledger-body tr:hover { background-color: #334155; }
+        #ledger-body td:nth-child(2) { font-weight: 500; min-width: 140px; }
+        #ledger-body td:nth-child(4) { color: #059669; font-weight: 700; white-space: nowrap; }
+        .dark #ledger-body td:nth-child(4) { color: #34d399; }
+        @media (max-width: 768px) { #ledger-body td:nth-child(3) { display: none; } }
+        /* Style for the hardcoded JS badges */
+        .badge { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; }
+        .badge-success { background-color: #d1fae5; color: #047857; }
+        .dark .badge-success { background-color: rgba(5, 150, 105, 0.2); color: #34d399; }
+        .trend { font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+        .trend.positive { color: #059669; }
+        .dark .trend.positive { color: #34d399; }
+        .trend.negative { color: #dc2626; }
+        .dark .trend.negative { color: #f87171; }
+    </style>
 </head>
-<body>
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <aside class="sidebar glass-panel">
-            <div class="brand">
-                <i class="ph ph-ghost"></i>
-                <h2>Ghost Ledger</h2>
-            </div>
-            <nav class="nav-menu">
-                <a href="/dashboard" class="nav-item active">
-                    <i class="ph ph-squares-four"></i> Dashboard
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="ph ph-list-dashes"></i> Transactions
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="ph ph-whatsapp-logo"></i> Webhook Logs
-                </a>
-                <a href="/export" class="nav-item" target="_blank" onclick="alert('Downloading CSV...');">
-                    <i class="ph ph-download-simple"></i> Export CSV
-                </a>
-            </nav>
-            <div class="user-profile">
-                <div class="avatar">
-                    <i class="ph ph-user"></i>
-                </div>
-                <div class="info">
-                    <span class="name">Admin</span>
-                    <span class="role">Manager</span>
-                </div>
-            </div>
-        </aside>
+<body class="h-full flex flex-col md:flex-row overflow-hidden text-gray-800 dark:text-gray-200 dark:bg-slate-900 transition-colors duration-300">
+    
+    <!-- Mobile Header -->
+    <div class="md:hidden flex items-center justify-between p-4 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+        <div class="flex items-center gap-3">
+            <img src="/static/img/sdcs_logo.png" alt="SDCS" class="h-9 w-9 rounded-full object-cover shadow-sm">
+            <span class="font-bold text-lg text-gray-900 dark:text-white tracking-tight">SDCS Admin</span>
+        </div>
+        <button id="menu-btn" class="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg">
+            <i class="ph ph-list text-2xl"></i>
+        </button>
+    </div>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="top-header">
-                <div class="greeting">
-                    <h1>Overview</h1>
-                    <p>Welcome back, here's your ledger summary today.</p>
-                </div>
-                <div class="header-actions">
-                    <div class="search-bar glass-panel">
-                        <i class="ph ph-magnifying-glass"></i>
-                        <input type="text" id="searchInput" placeholder="Search entries, customers...">
-                    </div>
-                </div>
-            </header>
+    <!-- Sidebar -->
+    <aside id="sidebar" class="hidden md:flex flex-col w-full md:w-64 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 h-full z-30 absolute top-0 left-0 md:relative transition-all shadow-xl md:shadow-none">
+        
+        <div class="p-6 flex items-center justify-between border-b border-gray-100 dark:border-slate-700">
+            <div class="flex items-center gap-3">
+                <img src="/static/img/sdcs_logo.png" alt="SDCS" class="h-10 w-10 rounded-full object-cover shadow-sm">
+                <span class="font-bold text-xl text-gray-900 dark:text-white tracking-tight">SDCS Admin</span>
+            </div>
+            <button id="close-menu-btn" class="md:hidden p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg">
+                <i class="ph ph-x text-2xl"></i>
+            </button>
+        </div>
 
-            <!-- Stats Widgets -->
-            <section class="stats-grid">
-                <div class="stat-card glass-panel">
-                    <div class="icon-wrap color-green">
-                        <i class="ph ph-currency-circle-dollar"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>Total Revenue</h3>
-                        <h2 id="stat-revenue">₦---</h2>
-                        <span class="trend positive" id="stat-trend"><i class="ph ph-trend-up"></i> --%</span>
+        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+            <a href="/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/30 font-medium transition-colors">
+                <i class="ph ph-squares-four text-xl"></i> Global Dashboard
+            </a>
+            <a href="/api/admin/export/csv" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-white font-medium transition-colors">
+                <i class="ph ph-file-csv text-xl"></i> Export Global CSV
+            </a>
+            <a href="/api/admin/export/pdf" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-white font-medium transition-colors">
+                <i class="ph ph-file-pdf text-xl"></i> Export Global PDF
+            </a>
+        </nav>
+
+        <div class="px-6 py-2">
+            <button id="theme-toggle" class="flex items-center w-full justify-between px-4 py-3 bg-gray-100 dark:bg-slate-700 rounded-xl text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors">
+                <span class="flex items-center gap-2"><i class="ph ph-moon text-xl dark:hidden"></i><i class="ph ph-sun text-xl hidden dark:block"></i> Theme</span>
+                <span class="text-xs font-bold uppercase tracking-wider dark:hidden">Dark</span>
+                <span class="text-xs font-bold uppercase tracking-wider hidden dark:block">Light</span>
+            </button>
+        </div>
+
+        <div class="p-4 border-t border-gray-100 dark:border-slate-700 m-4 rounded-xl bg-gray-50 dark:bg-slate-700/50 flex items-center gap-3">
+            <div class="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
+                <i class="ph ph-shield-star text-lg"></i>
+            </div>
+            <div class="flex-1 overflow-hidden">
+                <span class="block text-sm font-bold text-gray-900 dark:text-white truncate">Administrator</span>
+                <span class="block text-xs text-gray-500 dark:text-gray-400">Master Access</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full overflow-y-auto bg-gray-50 dark:bg-slate-900 pb-12 w-full transition-colors duration-300">
+        <header class="px-6 py-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 transition-colors">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Global Overview</h1>
+                <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Platform-wide sales and business diagnostics.</p>
+            </div>
+        </header>
+
+        <div class="p-4 sm:p-6 space-y-6 max-w-7xl mx-auto w-full">
+
+            <!-- Stats -->
+            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                <!-- Total Revenue -->
+                <div class="glass-card rounded-2xl p-5 flex items-start gap-4 hover:-translate-y-1 transition duration-300">
+                    <div class="h-12 w-12 rounded-xl bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 flex items-center justify-center text-2xl shrink-0"><i class="ph ph-currency-circle-dollar"></i></div>
+                    <div class="w-full overflow-hidden">
+                        <p class="text-[11px] uppercase tracking-wider font-bold text-gray-500 dark:text-gray-400 truncate">Total Gross Revenue</p>
+                        <h2 id="stat-revenue" class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mt-1 truncate">₦---</h2>
+                        <div id="stat-trend" class="mt-2"></div> <!-- Populated by JS trend logic -->
                     </div>
                 </div>
-                <div class="stat-card glass-panel">
-                    <div class="icon-wrap color-blue">
-                        <i class="ph ph-receipt"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>Total Entries</h3>
-                        <h2 id="stat-count">--</h2>
-                    </div>
+                <!-- Total Entries -->
+                <div class="glass-card rounded-2xl p-5 flex items-center gap-4 hover:-translate-y-1 transition duration-300">
+                    <div class="h-12 w-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center text-2xl shrink-0"><i class="ph ph-receipt"></i></div>
+                    <div class="truncate"><p class="text-[11px] uppercase tracking-wider font-bold text-gray-500 dark:text-gray-400 truncate">Global Transactions</p>
+                    <h2 id="stat-count" class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mt-1 truncate">--</h2></div>
                 </div>
-                <div class="stat-card glass-panel">
-                    <div class="icon-wrap color-orange">
-                        <i class="ph ph-users"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>Unique Customers</h3>
-                        <h2 id="stat-customers">--</h2>
-                    </div>
+                <!-- Active Businesses -->
+                <div class="glass-card rounded-2xl p-5 flex items-center gap-4 hover:-translate-y-1 transition duration-300">
+                    <div class="h-12 w-12 rounded-xl bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 flex items-center justify-center text-2xl shrink-0"><i class="ph ph-buildings"></i></div>
+                    <div class="truncate"><p class="text-[11px] uppercase tracking-wider font-bold text-gray-500 dark:text-gray-400 truncate">Active Businesses</p>
+                    <h2 id="stat-customers" class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mt-1 truncate">--</h2></div>
                 </div>
-                <div class="stat-card glass-panel">
-                    <div class="icon-wrap color-purple">
-                        <i class="ph ph-calendar-check"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>Today's Revenue</h3>
-                        <h2 id="stat-today">₦---</h2>
-                    </div>
+                <!-- Today's Rev -->
+                <div class="glass-card rounded-2xl p-5 flex items-center gap-4 hover:-translate-y-1 transition duration-300">
+                    <div class="h-12 w-12 rounded-xl bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 flex items-center justify-center text-2xl shrink-0"><i class="ph ph-calendar-check"></i></div>
+                    <div class="truncate"><p class="text-[11px] uppercase tracking-wider font-bold text-gray-500 dark:text-gray-400 truncate">Today's Total</p>
+                    <h2 id="stat-today" class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mt-1 truncate">₦---</h2></div>
                 </div>
             </section>
 
-            <!-- Ledger Table -->
-            <section class="ledger-section glass-panel">
-                <div class="section-header">
-                    <h2>Recent Transactions</h2>
-                    <a href="/export" class="btn btn-primary" target="_blank">
-                        <i class="ph ph-download-simple"></i> Download CSV
-                    </a>
+            <!-- Table -->
+            <section class="glass-card rounded-2xl overflow-hidden flex flex-col">
+                <div class="p-5 border-b border-gray-200 dark:border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-800 hidden sm:flex">
+                    <h2 class="text-lg font-bold text-gray-900 dark:text-white">Recent Global Transactions</h2>
+                    <div class="flex items-center gap-3 w-full sm:w-auto">
+                        <div class="flex items-center gap-2 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-lg px-3 py-2 flex-1 sm:flex-none">
+                            <i class="ph ph-magnifying-glass text-gray-400 dark:text-gray-400 text-lg"></i>
+                            <input type="text" id="searchInput" placeholder="Search universally..." class="bg-transparent border-none outline-none text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 w-full min-w-[250px]">
+                        </div>
+                    </div>
                 </div>
-                <div class="table-container">
-                    <table class="ledger-table">
+                <!-- Mobile search -->
+                <div class="p-4 border-b border-gray-200 dark:border-slate-700 block sm:hidden bg-white dark:bg-slate-800">
+                    <div class="flex items-center gap-2 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-lg px-3 py-2 w-full">
+                        <i class="ph ph-magnifying-glass text-gray-400 text-lg"></i>
+                        <input type="text" id="searchInputMobile" placeholder="Search globally..." class="bg-transparent border-none outline-none text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 w-full">
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto w-full">
+                    <table class="w-full text-left border-collapse min-w-[800px]">
                         <thead>
-                            <tr>
-                                <th>Date & Time</th>
-                                <th>Item Description</th>
-                                <th>Qty</th>
-                                <th>Amount</th>
-                                <th>Customer/Phone</th>
-                                <th>Status</th>
+                            <tr class="bg-gray-50 dark:bg-slate-800/50 text-xs uppercase tracking-wider font-bold text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-slate-700">
+                                <th class="py-4 px-6 font-semibold">Date & Time</th>
+                                <th class="py-4 px-6 font-semibold">Item</th>
+                                <th class="py-4 px-6 font-semibold hidden md:table-cell">Qty</th>
+                                <th class="py-4 px-6 font-semibold">Amount</th>
+                                <th class="py-4 px-6 font-semibold">Customer/Phone</th>
+                                <th class="py-4 px-6 font-semibold text-right">Status</th>
                             </tr>
                         </thead>
-                        <tbody id="ledger-body">
-                            <!-- Populated by JS -->
-                            <tr>
-                                <td colspan="6" class="loading-state">Loading transactions...</td>
-                            </tr>
+                        <tbody id="ledger-body" class="bg-white dark:bg-slate-800 divide-y divide-gray-100 dark:divide-slate-700 text-gray-600 dark:text-gray-300">
+                            <tr><td colspan="6" class="text-center py-12 text-gray-500 dark:text-gray-400 text-sm">Loading transactions...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </section>
-        </main>
-    </div>
+        </div>
+    </main>
 
-    <!-- Background Elements for Glassmorphism -->
-    <div class="gradient-orb orb-1"></div>
-    <div class="gradient-orb orb-2"></div>
+    <script>
+        // Dark Mode Logic
+        const html = document.documentElement;
+        const themeToggle = document.getElementById('theme-toggle');
 
+        function setTheme(isDark) {
+            if (isDark) {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        
+        let savedTheme = localStorage.getItem('theme');
+        if (!savedTheme) {
+            savedTheme = 'dark'; 
+        }
+        if (savedTheme === 'dark') {
+            setTheme(true);
+        } else {
+            setTheme(false);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            setTheme(!html.classList.contains('dark'));
+        });
+
+        // Mobile Menu toggle
+        const sb = document.getElementById('sidebar');
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            sb.classList.remove('hidden');
+            sb.classList.add('flex');
+        });
+        document.getElementById('close-menu-btn').addEventListener('click', () => {
+            sb.classList.add('hidden');
+            sb.classList.remove('flex');
+        });
+
+        // Search Mapper
+        const searchMobile = document.getElementById('searchInputMobile');
+        const searchDesktop = document.getElementById('searchInput');
+        if(searchMobile && searchDesktop) {
+            searchMobile.addEventListener('input', (e) => {
+                searchDesktop.value = e.target.value;
+                searchDesktop.dispatchEvent(new Event('input'));
+            });
+        }
+    </script>
     <script src="/static/js/dashboard.js"></script>
 </body>
 </html>

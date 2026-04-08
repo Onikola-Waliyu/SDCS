@@ -97,19 +97,6 @@ async def handle_webhook(
         return {"status": "error", "message": str(e)}
 
 
-@router.get("/export")
-async def export_transactions():
-    """Download all transactions as a CSV file (admin use)."""
-    with Session(engine) as session:
-        statement = select(Transaction).order_by(Transaction.created_at.desc())
-        transactions = session.exec(statement).all()
-    csv_data = generate_transactions_csv(transactions)
-    return Response(
-        content=csv_data,
-        media_type="text/csv",
-        headers={"Content-Disposition": "attachment; filename=transactions_export.csv"},
-    )
-
 
 # ---------------------------------------------------------------------------
 # Command handlers
