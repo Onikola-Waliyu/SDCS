@@ -226,7 +226,9 @@ async def process_incoming_message(phone_number: str, text: str, session: Option
             q = float(transaction.quantity)
             qty_str = f"{int(q)}" if q.is_integer() else f"{q}"
             
-            rec_str = f"✅ {qty_str} {transaction.unit} {transaction.item} - ₦{transaction.amount:,.2f}"
+            rec_str = f"✅ Recorded: {qty_str} {transaction.unit} of {transaction.item} – ₦{transaction.amount:,.2f}"
+            if transaction.customer:
+                rec_str += f" (Customer: {transaction.customer})"
             reply_lines.append(rec_str)
             
         db.commit()
