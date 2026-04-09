@@ -12,6 +12,7 @@ from datetime import datetime, timezone, timedelta
 from typing import Optional, Annotated
 
 from fastapi import APIRouter, Cookie, Depends, Form, HTTPException, Request
+from pydantic import BaseModel
 from fastapi.responses import HTMLResponse, RedirectResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
@@ -168,6 +169,33 @@ async def my_stats(
         "avg_sale_value": avg_sale,
         "period": period,
     }
+
+class TransactionCreateRequest(BaseModel):
+    item: str
+    quantity: float = 1.0
+    unit: Optional[str] = ""
+    amount: float
+    customer: Optional[str] = ""
+
+@router.post("/api/my/transactions")
+async def create_transaction(
+    tx_req: TransactionCreateRequest,
+    owner: User = Depends(_require_owner),
+    session: Session = Depends(get_session)
+):
+    tx = Transaction(
+        business_id=owner.business_id,
+        item=tx_req.item,
+        quantity=tx_req.quantity,
+        unit=tx_req.unit or "",
+        amount=tx_req.amount,
+        customer=tx_req.customer or "",
+        recorded_by=owner.phone_number,
+        status="recorded"
+    )
+    session.add(tx)
+    session.commit()
+    return {"status": "ok", "id": tx.id}
 
 
 @router.get("/api/my/transactions")

@@ -144,9 +144,13 @@
                 <div class="p-5 border-b border-gray-200 dark:border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-800 hidden sm:flex">
                     <h2 class="text-lg font-bold text-gray-900 dark:text-white">Transactions Ledger</h2>
                     <div class="flex items-center gap-3 w-full sm:w-auto">
+                        <button onclick="openEntryModal()" class="bg-green-600 hover:bg-green-700 text-white font-bold px-4 py-2 rounded-lg text-sm transition shadow-sm flex items-center gap-2 whitespace-nowrap">
+                            <i class="ph ph-plus-circle text-lg"></i>
+                            New Entry
+                        </button>
                         <div class="flex items-center gap-2 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-lg px-3 py-2 flex-1 sm:flex-none">
                             <i class="ph ph-magnifying-glass text-gray-400 dark:text-gray-400 text-lg"></i>
-                            <input type="text" id="searchInput" placeholder="Search..." class="bg-transparent border-none outline-none text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 w-full min-w-[200px]">
+                            <input type="text" id="searchInput" placeholder="Search..." class="bg-transparent border-none outline-none text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 w-full min-w-[150px]">
                         </div>
                     </div>
                 </div>
@@ -205,6 +209,43 @@
             </section>
         </div>
     </main>
+
+    <!-- NEW ENTRY MODAL -->
+    <div id="entry-modal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl w-full max-w-md overflow-hidden transform scale-95 opacity-0 transition-all duration-300" id="entry-modal-content">
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center bg-gray-50 dark:bg-slate-800/80">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2"><i class="ph ph-plus-circle text-green-600"></i> Record Sale</h3>
+                <button onclick="closeEntryModal()" class="text-gray-400 hover:text-red-500 transition"><i class="ph ph-x-circle text-2xl"></i></button>
+            </div>
+            <form id="add-entry-form" class="p-6 flex flex-col gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Item Sold <span class="text-red-500">*</span></label>
+                    <input type="text" id="entry-item" required placeholder="e.g. Rice, Indomie..." class="w-full bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-lg px-4 py-2.5 text-sm dark:text-white focus:ring-2 focus:ring-green-500 outline-none transition">
+                </div>
+                <div class="flex gap-4">
+                    <div class="flex-1">
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Quantity <span class="text-red-500">*</span></label>
+                        <input type="number" step="any" id="entry-qty" required value="1" min="0.1" class="w-full bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-lg px-4 py-2.5 text-sm dark:text-white focus:ring-2 focus:ring-green-500 outline-none transition">
+                    </div>
+                    <div class="flex-1">
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Unit</label>
+                        <input type="text" id="entry-unit" placeholder="e.g. bags, kg" class="w-full bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-lg px-4 py-2.5 text-sm dark:text-white focus:ring-2 focus:ring-green-500 outline-none transition">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Total Amount (₦) <span class="text-red-500">*</span></label>
+                    <input type="number" step="any" id="entry-amt" required placeholder="e.g. 15000" class="w-full bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-lg px-4 py-2.5 text-sm dark:text-white focus:ring-2 focus:ring-green-500 outline-none transition">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Payment / Customer</label>
+                    <input type="text" id="entry-customer" placeholder="e.g. Bank Transfer, POS, Customer Name" class="w-full bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-lg px-4 py-2.5 text-sm dark:text-white focus:ring-2 focus:ring-green-500 outline-none transition">
+                </div>
+                <button type="submit" id="submit-entry-btn" class="mt-2 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg text-sm transition shadow flex items-center justify-center gap-2">
+                    <i class="ph ph-check-circle"></i> Save Entry
+                </button>
+            </form>
+        </div>
+    </div>
 
     <script>
         const PHONE = "{{ phone }}";

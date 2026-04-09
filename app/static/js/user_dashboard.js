@@ -123,6 +123,62 @@ function applyDateRange() {
   refresh();
 }
 
+// ── Web Manual Entry ──────────────────────────────────────────────────────────
+function openEntryModal() {
+    const modal = document.getElementById('entry-modal');
+    const content = document.getElementById('entry-modal-content');
+    modal.classList.remove('hidden');
+    // slight delay for animation
+    setTimeout(() => {
+        content.classList.remove('scale-95', 'opacity-0');
+        content.classList.add('scale-100', 'opacity-100');
+    }, 10);
+}
+
+function closeEntryModal() {
+    const modal = document.getElementById('entry-modal');
+    const content = document.getElementById('entry-modal-content');
+    content.classList.remove('scale-100', 'opacity-100');
+    content.classList.add('scale-95', 'opacity-0');
+    // wait for transition
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        document.getElementById('add-entry-form').reset();
+    }, 300);
+}
+
+document.getElementById('add-entry-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('submit-entry-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="ph ph-spinner animate-spin"></i> Saving...';
+
+    const payload = {
+        item: document.getElementById('entry-item').value.trim(),
+        quantity: parseFloat(document.getElementById('entry-qty').value),
+        unit: document.getElementById('entry-unit').value.trim(),
+        amount: parseFloat(document.getElementById('entry-amt').value),
+        customer: document.getElementById('entry-customer').value.trim()
+    };
+
+    try {
+        const res = await fetch('/api/my/transactions', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error('Failed to save');
+        closeEntryModal();
+        refresh(); // update visually immediately
+    } catch(err) {
+        console.error(err);
+        alert('Failed to save transaction: ' + err.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="ph ph-check-circle"></i> Save Entry';
+    }
+});
+
 // ── Export ────────────────────────────────────────────────────────────────────
 function triggerExport(type='csv') {
   window.location.href = `/api/my/export/${type}?${buildQS()}`;
