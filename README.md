@@ -1,29 +1,29 @@
-# Ghost Ledger 👻
+# SDCS Ledger
 
-Ghost Ledger is an AI-powered WhatsApp accounting bot designed specifically for small business owners and sales teams. Instead of manually filling out spreadsheets or clicking through accounting apps, you simply send a natural WhatsApp message detailing your sale. Ghost Ledger parses the message using OpenAI, automatically structures the data, calculates totals, and securely syncs it to a Multi-Tenant Web Dashboard.
+SDCS Ledger is an AI-powered WhatsApp accounting bot designed specifically for small business owners and sales teams. Instead of manually filling out spreadsheets or clicking through accounting apps, you simply send a natural WhatsApp message detailing your sale. The AI securely processes it and syncs it across a Master Multi-Tenant Web Dashboard.
 
 ## Features
 
-- **Conversational Accounting:** Send raw text or Pidgin English (e.g., *"I sold 2 bags of rice for 15k"*). The AI automatically extracts the item, quantity, unit, price, and customer name.
-- **Multi-Tenant Architecture:** Business owners can register their business directly from WhatsApp.
-- **Team Management:** Owners can add staff members via WhatsApp or the Web UI. Staff can immediately start logging sales, and those sales funnel directly into the owner's unified dashboard.
-- **Executive Web Dashboard:** A beautiful, responsive glassmorphic dashboard to view revenue trends, filter data by date, and export CSVs.
-- **WhatsApp Ledger Commands:** Type `today`, `summary`, or `undo` right in the chat to manage your ledger on the go.
+- **Conversational Accounting:** Send raw text or Pidgin English (e.g., *"I sold 2 bags of rice for 15k"*).
+- **Multi-Tenant Architecture:** Fully isolated business spaces utilizing rigorous state machines.
+- **Team Management:** Add branch staff cleanly.
+- **Executive Web Dashboard:** A highly premium, localized dashboard to view revenue trends natively, run refunds, and aggregate global master views.
+- **WhatsApp Ledger Commands:** Full NLP tracking through WhatsApp Business.
 
 ## Technology Stack
 
-- **Backend:** Python 3.10+, FastAPI
-- **Database:** PostgreSQL (or SQLite for local config), SQLModel / SQLAlchemy
+- **Backend:** Python 3.12, FastAPI
+- **Database:** PostgreSQL (Render Production), SQLModel / SQLAlchemy
 - **Integration:** Meta Cloud API (WhatsApp Business), OpenAI API (gpt-4o-mini)
-- **Frontend (Dashboard):** Jinja2 Templates, Vanilla JS, Custom CSS (Glassmorphism)
-- **Deployment:** Docker & Docker Compose
+- **Frontend (Dashboard):** Responsive Tailwind CSS UI, Vanilla JS
+- **Deployment:** Render Platform (Web Servce + PostgreSQL) / Docker
 
 ## Local Development Setup
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/iamproms/ghost-ledger.git
-   cd ghost-ledger
+   git clone https://github.com/Onikola-Waliyu/SDCS.git
+   cd SDCS
    ```
 
 2. **Set up Environment Variables:**
