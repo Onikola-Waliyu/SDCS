@@ -1,21 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SDCS Ledger | Track Your Sales on WhatsApp</title>
-    <meta name="description"
-        content="The easiest way for African merchants to track sales, manage inventory, and grow their business—all through WhatsApp.">
-
-    <!-- CSS -->
+    <title>SDCS Ledger — Track Your Business Sales on WhatsApp</title>
+    <meta name="description" content="Record your sales by sending a WhatsApp message. SDCS Ledger automatically organises your records and gives you a live dashboard — no spreadsheets needed.">
     <link rel="stylesheet" href="/static/css/home.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="/static/img/sdcs_logo.png">
 </head>
-
 <body>
 
     <!-- Navigation -->
@@ -23,374 +16,203 @@
         <nav>
             <div class="container nav-container">
                 <a href="/" class="logo">
-                    <img src="/static/img/sdcs_logo.png" alt="SDCS Logo">
-                    <span>SDCS <span style="color: var(--primary);">Ledger</span></span>
+                    <img src="/static/img/sdcs_logo.png" alt="SDCS Ledger Logo">
+                    <span>SDCS <span class="logo-accent">Ledger</span></span>
                 </a>
 
-                <ul class="nav-links">
-                    <li><a href="#home">Home</a></li>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="/" class="active">Home</a></li>
                     <li><a href="#how-it-works">How It Works</a></li>
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#pricing">Pricing</a></li>
-                    <li><a href="#use-cases">Use Cases</a></li>
-                    <li><a href="#testimonials">Testimonials</a></li>
-                    <li><a href="#faq">FAQ</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="/features">Features</a></li>
+                    <li><a href="/pricing">Pricing</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/contact">Contact</a></li>
                 </ul>
 
-                <div class="nav-btns">
+                <div class="nav-cta">
+                    <a href="/my-ledger" class="login-link">Log In</a>
                     <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary">
-                        <i class="fa-brands fa-whatsapp"></i>
-                        <span>Start Tracking</span>
+                        <i class="fa-brands fa-whatsapp"></i> Get Started
                     </a>
                 </div>
 
-                <div class="nav-toggle">
+                <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
                     <i class="fa-solid fa-bars"></i>
-                </div>
+                </button>
             </div>
         </nav>
     </header>
 
     <main>
         <!-- Hero Section -->
-        <section id="home" class="hero">
+        <section class="hero" id="home">
             <div class="container hero-grid">
                 <div class="hero-content">
-                    <span class="section-tag">Sales Tracking Made Simple</span>
-                    <h1>Track your sales on <span style="color: var(--primary);">WhatsApp</span></h1>
-                    <p>No books. No spreadsheets. No stress. Send a message. We record everything for you automatically.
-                    </p>
+                    <span class="eyebrow">WhatsApp-Powered Sales Tracking</span>
+                    <h1>Know exactly what your business is making — every day.</h1>
+                    <p>Your staff send a simple WhatsApp message. SDCS Ledger records the sale, organises the data, and updates your dashboard automatically.</p>
                     <div class="hero-btns">
-                        <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary btn-large">
-                            <i class="fa-brands fa-whatsapp"></i>
-                            <span>Start Tracking Now</span>
+                        <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary">
+                            <i class="fa-brands fa-whatsapp"></i> Start Tracking Free
                         </a>
-                        <a href="#how-it-works" class="btn btn-secondary btn-large">See How It Works</a>
+                        <a href="#how-it-works" class="btn btn-outline-white">See How It Works</a>
                     </div>
                 </div>
-                <div class="hero-mockup">
-                    <div class="mockup-card">
-                        <!-- Mockup illustration could go here -->
-                        <div
-                            style="background: var(--light-gray); height: 300px; border-radius: 1rem; display: flex; align-items: center; justify-content: center; color: var(--slate);">
-                            <div style="text-align: center;">
-                                <i class="fa-brands fa-whatsapp"
-                                    style="font-size: 4rem; color: var(--primary); margin-bottom: 1rem;"></i>
-                                <p style="font-weight: 700;">Simple Entry Example</p>
-                                <p style="font-style: italic;">"Sold 2 bags of rice for 15k"</p>
-                            </div>
-                        </div>
+
+                <div class="hero-panel">
+                    <p class="hero-panel-title">Live Example — WhatsApp Chat</p>
+                    <div class="wa-message">
+                        "Sold 3 bags of rice for 45,000 naira"
+                    </div>
+                    <div class="wa-reply">
+                        <p>✅ <strong>Recorded!</strong></p>
+                        <p>3 bags of Rice — ₦45,000.00</p>
+                        <p style="font-size:0.8125rem; margin-top:0.5rem; color:rgba(255,255,255,0.55);">Logged by: Staff · 2:14 PM</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Problem Section -->
-        <section id="product" class="problem reveal">
-            <div class="container text-center">
-                <span class="section-tag">The Problem</span>
-                <h2 class="section-title">Stop the Chaos of Manual Tracking</h2>
-                <p class="section-desc mx-auto" style="margin: 0 auto;">If you can't see your numbers clearly, you can't
-                    scale your business properly. Missing records and paper clutter kill growth.</p>
-
-                <div class="problem-grid">
-                    <div class="problem-card">
-                        <i class="fa-solid fa-book"></i>
-                        <h3>Messy Paper Records</h3>
-                        <p>Lost books and illegible handwriting lead to missing money and confusion at the end of the
-                            day.</p>
-                    </div>
-                    <div class="problem-card">
-                        <i class="fa-solid fa-clock"></i>
-                        <h3>End-of-Day Stress</h3>
-                        <p>Hours spent calculating sales manually after a long day of work. You deserve rest, not more
-                            math.</p>
-                    </div>
-                    <div class="problem-card">
-                        <i class="fa-solid fa-eye-slash"></i>
-                        <h3>Lack of Visibility</h3>
-                        <p>Don't know which products are selling or how much profit you're actually making. Fly blind no
-                            more.</p>
-                    </div>
+        <!-- Stats Bar -->
+        <div class="stat-bar">
+            <div class="container stat-bar-inner">
+                <div class="stat-item">
+                    <strong>500+</strong>
+                    <span>Active Merchants</span>
+                </div>
+                <div class="stat-item">
+                    <strong>₦2.3M+</strong>
+                    <span>Sales Recorded</span>
+                </div>
+                <div class="stat-item">
+                    <strong>3 Steps</strong>
+                    <span>To Get Started</span>
+                </div>
+                <div class="stat-item">
+                    <strong>Zero</strong>
+                    <span>Spreadsheets Needed</span>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- How It Works Section -->
-        <section id="how-it-works" class="how-it-works reveal">
+        <!-- How It Works -->
+        <section class="how-it-works" id="how-it-works">
             <div class="container">
-                <span class="section-tag">Simplifying Business</span>
-                <h2 class="section-title">3 Simple Steps to Clarity</h2>
+                <span class="section-label">Simple Process</span>
+                <h2 class="section-title">How SDCS Ledger Works</h2>
+                <p class="section-intro">No training required. If your staff can send a WhatsApp message, they can use SDCS Ledger.</p>
 
-                <div class="steps-grid">
-                    <div class="step-card">
-                        <div class="step-number">1</div>
-                        <h3>Send a Message</h3>
-                        <p>Type a simple entry like <strong>"Sold 2 bags of rice for 15k"</strong> on WhatsApp. It's as
-                            easy as chatting with a friend.</p>
+                <div class="steps-row">
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <h3>Record the Sale</h3>
+                        <p>Your staff send a message on WhatsApp — item name, quantity, and amount. Just like they would text a friend. No forms, no apps to open.</p>
                     </div>
-                    <div class="step-card">
-                        <div class="step-number">2</div>
-                        <h3>Automatic Recording</h3>
-                        <p>Our intelligent system parses the item, quantity, and amount automatically. No manual data
-                            entry required.</p>
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <h3>Automatic Processing</h3>
+                        <p>SDCS Ledger reads the message, extracts the details, and saves the transaction instantly. Every sale is converted into a structured record.</p>
                     </div>
-                    <div class="step-card">
-                        <div class="step-number">3</div>
-                        <h3>Instant Dashboard</h3>
-                        <p>View your sales instantly on your digital dashboard. Track performance, stock, and profit in
-                            real-time.</p>
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <h3>View Your Dashboard</h3>
+                        <p>Log in to your web dashboard to see your daily revenue, top products, and staff performance — updated in real time, from any device.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Key Benefits Section -->
-        <section id="features" class="reveal">
+        <!-- Use Cases -->
+        <section class="use-cases" id="use-cases">
             <div class="container">
-                <div class="text-center">
-                    <span class="section-tag">Value You Can See</span>
-                    <h2 class="section-title">More Than Just a Ledger</h2>
-                </div>
+                <span class="section-label">Who It's For</span>
+                <h2 class="section-title">Built for Businesses at Every Scale</h2>
+                <p class="section-intro">From a single-person shop to a business with multiple branches and staff, SDCS Ledger fits your operation.</p>
 
-                <div class="benefits-grid">
-                    <div class="benefit-card">
-                        <div class="benefit-icon"><i class="fa-solid fa-chart-pie"></i></div>
-                        <div>
-                            <h3>Real-time Visibility</h3>
-                            <p>Clear daily records and live stock levels. Know exactly what's happening in your
-                                business, every second.</p>
-                        </div>
+                <div class="use-cases-grid">
+                    <div class="use-case-card">
+                        <div class="icon"><i class="fa-solid fa-store"></i></div>
+                        <h3>Shop Owners</h3>
+                        <p>Replace paper notebooks with instant digital records. Know your daily sales without doing end-of-day calculations.</p>
                     </div>
-                    <div class="benefit-card">
-                        <div class="benefit-icon"><i class="fa-solid fa-lightbulb"></i></div>
-                        <div>
-                            <h3>Business Insights</h3>
-                            <p>Automated profit tracking and product movement analysis. Identify your best-sellers and
-                                maximize profit.</p>
-                        </div>
+                    <div class="use-case-card">
+                        <div class="icon"><i class="fa-solid fa-truck-ramp-box"></i></div>
+                        <h3>Market Traders</h3>
+                        <p>Record sales on the move through WhatsApp, even in the busiest market conditions. No slowing down.</p>
                     </div>
-                    <div class="benefit-card">
-                        <div class="benefit-icon"><i class="fa-solid fa-mobile-screen"></i></div>
-                        <div>
-                            <h3>Anywhere Accessibility</h3>
-                            <p>Monitor business performance from anywhere, at any time. Your business is now in your
-                                pocket.</p>
-                        </div>
-                    </div>
-                    <div class="benefit-card">
-                        <div class="benefit-icon"><i class="fa-solid fa-users"></i></div>
-                        <div>
-                            <h3>Staff Monitoring</h3>
-                            <p>Track staff activity and branch performance remotely. Eliminate the need to wait for
-                                manual reports.</p>
-                        </div>
+                    <div class="use-case-card">
+                        <div class="icon"><i class="fa-solid fa-network-wired"></i></div>
+                        <h3>Multi-Branch Owners</h3>
+                        <p>Manage multiple locations from one dashboard. See what each branch is selling without calling them every hour.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Pricing Section -->
-        <section id="pricing" class="reveal">
+        <!-- Testimonials -->
+        <section class="testimonials" id="testimonials">
             <div class="container">
-                <div class="text-center">
-                    <span class="section-tag">Pricing</span>
-                    <h2 class="section-title">Plans for Every Scale</h2>
-                    <p class="section-desc mx-auto">Start for free and upgrade as your business grows. No hidden fees.
-                    </p>
-                </div>
+                <span class="section-label">What Merchants Say</span>
+                <h2 class="section-title">Trusted Across Nigeria</h2>
 
-                <div class="problem-grid" style="margin-top: 4rem;">
-                    <div class="problem-card text-center" style="border-bottom-color: var(--primary);">
-                        <h3>Starter</h3>
-                        <p style="font-size: 2.5rem; font-weight: 800; margin: 1rem 0;">FREE</p>
-                        <ul style="margin-bottom: 2rem; color: var(--slate);">
-                            <li>Up to 50 sales/month</li>
-                            <li>Basic Dashboard</li>
-                            <li>WhatsApp Support</li>
-                        </ul>
-                        <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-secondary"
-                            style="width: 100%;">Get Started</a>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <blockquote>"I used to spend an hour at night trying to remember what I sold. Now I know my numbers before I close the shop."</blockquote>
+                        <p class="author">Alhaji Musa — <span>Market Trader, Kano</span></p>
                     </div>
-                    <div class="problem-card text-center"
-                        style="border-bottom-color: var(--primary); transform: scale(1.05); box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
-                        <span class="section-tag"
-                            style="position: absolute; top: -1rem; left: 50%; transform: translateX(-50%);">Most
-                            Popular</span>
-                        <h3>Business</h3>
-                        <p style="font-size: 2.5rem; font-weight: 800; margin: 1rem 0;">₦5,000<span
-                                style="font-size: 1rem; font-weight: 400;">/mo</span></p>
-                        <ul style="margin-bottom: 2rem; color: var(--slate);">
-                            <li>Unlimited Sales</li>
-                            <li>Advanced Analytics</li>
-                            <li>Priority Support</li>
-                        </ul>
-                        <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary"
-                            style="width: 100%;">Go Business</a>
+                    <div class="testimonial-card">
+                        <blockquote>"Monitoring all three of my branches from home is now possible. No more stories from staff — everything is on the dashboard."</blockquote>
+                        <p class="author">Mrs. Oluchi — <span>Boutique Owner, Onitsha</span></p>
                     </div>
-                    <div class="problem-card text-center" style="border-bottom-color: var(--primary);">
-                        <h3>Enterprise</h3>
-                        <p style="font-size: 2.5rem; font-weight: 800; margin: 1rem 0;">Custom</p>
-                        <ul style="margin-bottom: 2rem; color: var(--slate);">
-                            <li>Multiple Branches</li>
-                            <li>Staff Permissions</li>
-                            <li>API Access</li>
-                        </ul>
-                        <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-secondary"
-                            style="width: 100%;">Contact Sales</a>
+                    <div class="testimonial-card">
+                        <blockquote>"My staff didn't need any training. They already knew how to send WhatsApp messages. That's all they do."</blockquote>
+                        <p class="author">Segun — <span>Electronics Store, Lagos</span></p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Use Cases / Who We Serve Section -->
-        <section id="use-cases" class="problem reveal" style="background-color: var(--navy); color: var(--white);">
+        <!-- FAQ -->
+        <section class="faq" id="faq">
             <div class="container">
-                <div class="text-center">
-                    <span class="section-tag" style="background-color: rgba(255,255,255,0.1); color: var(--white);">Who
-                        We Serve</span>
-                    <h2 class="section-title">Built for Every Merchant</h2>
-                    <p class="section-desc mx-auto" style="color: rgba(255,255,255,0.7); margin: 0 auto;">From the
-                        street corner to the multi-branch enterprise, we bring structure to your growth.</p>
-                </div>
+                <span class="section-label">FAQ</span>
+                <h2 class="section-title">Common Questions</h2>
 
-                <div class="problem-grid" style="margin-top: 4rem;">
-                    <div class="problem-card"
-                        style="background: rgba(255,255,255,0.05); border-bottom-color: var(--primary); border: 1px solid rgba(255,255,255,0.1);">
-                        <i class="fa-solid fa-store" style="color: var(--primary);"></i>
-                        <h3 style="color: var(--white);">Small Shop Owners</h3>
-                        <p style="color: rgba(255,255,255,0.7);">Get rid of the notebook and start professionalizing
-                            your bookkeeping today.</p>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <h4>Do my staff need to download anything?</h4>
+                        <p>No. All they need is WhatsApp, which they already have. Sales are recorded by sending a normal text message to the business number.</p>
                     </div>
-                    <div class="problem-card"
-                        style="background: rgba(255,255,255,0.05); border-bottom-color: var(--primary); border: 1px solid rgba(255,255,255,0.1);">
-                        <i class="fa-solid fa-truck-ramp-box" style="color: var(--primary);"></i>
-                        <h3 style="color: var(--white);">Market Traders</h3>
-                        <p style="color: rgba(255,255,255,0.7);">Fast, mobile-first recording that keeps up with the
-                            pace of the busy market.</p>
+                    <div class="faq-item">
+                        <h4>What if my staff write differently each time?</h4>
+                        <p>The system understands natural language. Whether they write "sold 2 bags rice 10k" or "2 bags of rice for 10,000", it processes the entry correctly.</p>
                     </div>
-                    <div class="problem-card"
-                        style="background: rgba(255,255,255,0.05); border-bottom-color: var(--primary); border: 1px solid rgba(255,255,255,0.1);">
-                        <i class="fa-solid fa-network-wired" style="color: var(--primary);"></i>
-                        <h3 style="color: var(--white);">Multi-branch Owners</h3>
-                        <p style="color: rgba(255,255,255,0.7);">See all your branches in one place without visiting
-                            them or calling every hour.</p>
+                    <div class="faq-item">
+                        <h4>Can I use it for multiple shop branches?</h4>
+                        <p>Yes. You can assign different staff to different branches, and the dashboard shows performance per location, all from one account.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Is my financial data secure?</h4>
+                        <p>Yes. Your data is stored securely on encrypted servers and is only accessible through your authenticated account.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>How do I get started?</h4>
+                        <p>Click "Get Started", send a first message to our WhatsApp bot, and follow the brief setup. It takes under two minutes.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Testimonials Section -->
-        <section id="testimonials" class="reveal" style="background-color: var(--light-gray);">
+        <!-- CTA -->
+        <section class="cta-section" id="contact">
             <div class="container">
-                <div class="text-center">
-                    <span class="section-tag">Testimonials</span>
-                    <h2 class="section-title">Trusted by 500+ Merchants</h2>
-                    <p class="section-desc mx-auto">See how SDCS Ledger is transforming businesses across Africa.</p>
-                </div>
-
-                <div class="problem-grid" style="margin-top: 4rem;">
-                    <div class="problem-card">
-                        <div style="color: #facc15; margin-bottom: 1rem;">
-                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                                class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                                class="fa-solid fa-star"></i>
-                        </div>
-                        <p style="font-style: italic; margin-bottom: 1.5rem;">"I used to lose so much time at night
-                            calculating my sales. Since I started using SDCS Ledger on WhatsApp, I finish my accounting
-                            in 2 minutes!"</p>
-                        <p><strong>- Alhaji Musa</strong>, Market Trader in Kano</p>
-                    </div>
-                    <div class="problem-card">
-                        <div style="color: #facc15; margin-bottom: 1rem;">
-                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                                class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                                class="fa-solid fa-star"></i>
-                        </div>
-                        <p style="font-style: italic; margin-bottom: 1.5rem;">"Monitoring my three shop branches from
-                            home is a dream come true. No more stories from my staff, everything is clear on the
-                            dashboard."</p>
-                        <p><strong>- Mrs. Oluchi</strong>, Boutique Owner in Onitsha</p>
-                    </div>
-                    <div class="problem-card">
-                        <div style="color: #facc15; margin-bottom: 1rem;">
-                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                                class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                                class="fa-solid fa-star"></i>
-                        </div>
-                        <p style="font-style: italic; margin-bottom: 1.5rem;">"The WhatsApp interface is so natural. My
-                            staff didn't even need training. They just send the sales as they talk to customers."</p>
-                        <p><strong>- Segun</strong>, Electronics Store in Lagos</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- About Section -->
-        <section id="about" class="reveal">
-            <div class="container hero-grid">
-                <div class="hero-content">
-                    <span class="section-tag">About Us</span>
-                    <h2 class="section-title">The Future of African Commerce</h2>
-                    <p>SDCS Ledger was built with a simple mission: to empower the informal economy with elite financial
-                        tools. We believe that every merchant, no matter the size, deserves to have clear visibility
-                        into their business growth.</p>
-                    <p>By leveraging the power of WhatsApp, we remove the technical barriers that keep small businesses
-                        from digitizing.</p>
-                </div>
-                <div class="hero-mockup">
-                    <div class="mockup-card" style="padding: 0; overflow: hidden;">
-                        <div style="background: var(--navy); padding: 4rem; text-align: center; color: var(--white);">
-                            <i class="fa-solid fa-rocket"
-                                style="font-size: 5rem; color: var(--primary); margin-bottom: 2rem;"></i>
-                            <h3>Our Vision</h3>
-                            <p style="opacity: 0.8;">To be the default financial operating system for every marketplace
-                                in Africa.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FAQ Section -->
-        <section id="faq" class="reveal" style="background-color: var(--light-gray);">
-            <div class="container">
-                <div class="text-center">
-                    <span class="section-tag">FAQ</span>
-                    <h2 class="section-title">Frequently Asked Questions</h2>
-                </div>
-
-                <div style="max-width: 800px; margin: 4rem auto 0;">
-                    <div class="problem-card" style="margin-bottom: 1rem; padding: 1.5rem;">
-                        <h4 style="margin-bottom: 0.5rem;">Is my data secure?</h4>
-                        <p>Yes, we use bank-level encryption to protect your data. Only you have access to your
-                            financial records.</p>
-                    </div>
-                    <div class="problem-card" style="margin-bottom: 1rem; padding: 1.5rem;">
-                        <h4 style="margin-bottom: 0.5rem;">Do I need to download an app?</h4>
-                        <p>No! SDCS Ledger works entirely within WhatsApp. You only use your browser to view your
-                            dashboard.</p>
-                    </div>
-                    <div class="problem-card" style="margin-bottom: 1rem; padding: 1.5rem;">
-                        <h4 style="margin-bottom: 0.5rem;">How do I start?</h4>
-                        <p>Simply click any "Start Tracking" button and send a message to our bot. It will guide you
-                            through the 1-minute setup.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CTA Section -->
-        <section id="contact" class="reveal">
-            <div class="container">
-                <div class="cta-banner">
-                    <h2>Don't let another sale slip away unrecorded.</h2>
-                    <p>Join the future of African commerce. Start using SDCS Ledger today.</p>
-                    <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary btn-large">
-                        <i class="fa-brands fa-whatsapp"></i>
-                        <span>Start Using SDCS Ledger Today</span>
+                <h2>Start tracking your sales the right way.</h2>
+                <p>You don't need to change how you sell. You just need a better way to record it.</p>
+                <div class="cta-btns">
+                    <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary">
+                        <i class="fa-brands fa-whatsapp"></i> Get Started on WhatsApp
                     </a>
+                    <a href="/contact" class="btn btn-outline-white">Talk to Us</a>
                 </div>
             </div>
         </section>
@@ -400,94 +222,66 @@
     <footer>
         <div class="container">
             <div class="footer-grid">
-                <div class="footer-col">
-                    <a href="/" class="logo" style="margin-bottom: 1.5rem;">
-                        <img src="/static/img/sdcs_logo.png" alt="SDCS Logo">
-                        <span>SDCS <span style="color: var(--primary);">Ledger</span></span>
+                <div class="footer-brand">
+                    <a href="/" class="logo">
+                        <img src="/static/img/sdcs_logo.png" alt="SDCS Ledger Logo">
+                        <span>SDCS <span class="logo-accent">Ledger</span></span>
                     </a>
-                    <p style="color: var(--slate); font-size: 0.9375rem;">Empowering African merchants with intelligent,
-                        WhatsApp-based financial management tools.</p>
+                    <p>Empowering African merchants with simple, reliable financial record-keeping through WhatsApp.</p>
                 </div>
                 <div class="footer-col">
                     <h4>Product</h4>
                     <ul>
-                        <li><a href="#features">Features</a></li>
+                        <li><a href="/features">Features</a></li>
+                        <li><a href="/pricing">Pricing</a></li>
                         <li><a href="#how-it-works">How It Works</a></li>
-                        <li><a href="/my-ledger">Dashboard</a></li>
+                        <li><a href="/my-ledger">Dashboard Login</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4>Company</h4>
                     <ul>
-                        <li><a href="#about">About Us</a></li>
-                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Contact</a></li>
                         <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4>Support</h4>
                     <ul>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">WhatsApp Support</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="https://wa.me/{{ bot_phone }}" target="_blank">WhatsApp Support</a></li>
+                        <li><a href="mailto:info@sdcsledger.com">Email Us</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2026 SDCS Ledger. All rights reserved.</p>
-                <div style="display: flex; gap: 1.5rem;">
-                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
-                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <div style="display:flex; gap:1.5rem;">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="mailto:info@sdcsledger.com">Contact</a>
                 </div>
             </div>
         </div>
     </footer>
 
     <script>
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
+        // Mobile nav toggle
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        navToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
         });
 
-        // Mobile Nav Toggle
-        const navToggle = document.querySelector('.nav-toggle');
-        const navLinks = document.querySelector('.nav-links');
-
-        if (navToggle) {
-            navToggle.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
+        // Close nav when a link is clicked on mobile
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
             });
-
-            // Close menu when a link is clicked
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', () => {
-                    navLinks.classList.remove('active');
-                });
-            });
-        }
-
-        // Scroll Reveal Logic
-        function reveal() {
-            var reveals = document.querySelectorAll(".reveal");
-            for (var i = 0; i < reveals.length; i++) {
-                var windowHeight = window.innerHeight;
-                var elementTop = reveals[i].getBoundingClientRect().top;
-                var elementVisible = 150;
-                if (elementTop < windowHeight - elementVisible) {
-                    reveals[i].classList.add("active");
-                }
-            }
-        }
-
-        window.addEventListener("scroll", reveal);
-        // To check the scroll position on page load
-        reveal();
+        });
     </script>
 </body>
 </html>

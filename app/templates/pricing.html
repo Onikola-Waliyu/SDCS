@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing — SDCS Ledger</title>
+    <meta name="description" content="Simple, transparent pricing for SDCS Ledger. Start free and upgrade as your business grows.">
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="/static/img/sdcs_logo.png">
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="container nav-container">
+                <a href="/" class="logo">
+                    <img src="/static/img/sdcs_logo.png" alt="SDCS Ledger Logo">
+                    <span>SDCS <span class="logo-accent">Ledger</span></span>
+                </a>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/#how-it-works">How It Works</a></li>
+                    <li><a href="/features">Features</a></li>
+                    <li><a href="/pricing" class="active">Pricing</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+                <div class="nav-cta">
+                    <a href="/my-ledger" class="login-link">Log In</a>
+                    <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary">
+                        <i class="fa-brands fa-whatsapp"></i> Get Started
+                    </a>
+                </div>
+                <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-hero">
+            <div class="container">
+                <span class="section-label">Pricing</span>
+                <h1>Plans for every stage of your business</h1>
+                <p>Start for free and upgrade when you need more. No hidden charges, no long-term contracts.</p>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="pricing-grid">
+
+                    <!-- Starter -->
+                    <div class="pricing-card">
+                        <p class="plan-name">Starter</p>
+                        <p class="plan-price">Free</p>
+                        <p class="plan-desc">For individuals and small shops just getting started with digital records.</p>
+                        <ul>
+                            <li>Up to 100 sales per month</li>
+                            <li>1 user account</li>
+                            <li>WhatsApp sales recording</li>
+                            <li>Basic web dashboard</li>
+                            <li>CSV export</li>
+                        </ul>
+                        <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-secondary" style="width:100%; justify-content:center;">
+                            Get Started Free
+                        </a>
+                    </div>
+
+                    <!-- Business -->
+                    <div class="pricing-card featured">
+                        <span class="badge-popular">Most Popular</span>
+                        <p class="plan-name">Business</p>
+                        <p class="plan-price">₦5,000 <span>/ month</span></p>
+                        <p class="plan-desc">For growing shops with staff and a need for deeper performance tracking.</p>
+                        <ul>
+                            <li>Unlimited sales recording</li>
+                            <li>Up to 5 staff accounts</li>
+                            <li>Full sales dashboard</li>
+                            <li>Return & refund tracking</li>
+                            <li>CSV and PDF export</li>
+                            <li>Date filtering & search</li>
+                            <li>Priority WhatsApp support</li>
+                        </ul>
+                        <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary" style="width:100%; justify-content:center;">
+                            Start Business Plan
+                        </a>
+                    </div>
+
+                    <!-- Enterprise -->
+                    <div class="pricing-card">
+                        <p class="plan-name">Enterprise</p>
+                        <p class="plan-price">Custom</p>
+                        <p class="plan-desc">For businesses with multiple branches, large teams, or specific requirements.</p>
+                        <ul>
+                            <li>Unlimited sales & staff</li>
+                            <li>Multi-branch management</li>
+                            <li>Branch-level reporting</li>
+                            <li>Admin control panel</li>
+                            <li>Custom export formats</li>
+                            <li>Dedicated account support</li>
+                        </ul>
+                        <a href="/contact" class="btn btn-secondary" style="width:100%; justify-content:center;">
+                            Contact Us
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- FAQ note -->
+                <div style="margin-top:4rem; padding: 2rem; background-color: var(--light-gray); border:1px solid var(--border); border-radius:4px; max-width:680px;">
+                    <h3 style="font-size:1rem; margin-bottom:0.75rem; color:var(--navy);">Have questions about pricing?</h3>
+                    <p style="font-size:0.9375rem;">We're happy to walk you through the right plan for your business size. <a href="/contact" style="color:var(--green); font-weight:600;">Get in touch</a> and we'll respond the same day.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="container">
+                <h2>Start with the free plan today.</h2>
+                <p>No credit card needed. Set up in under two minutes on WhatsApp.</p>
+                <div class="cta-btns">
+                    <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary">
+                        <i class="fa-brands fa-whatsapp"></i> Get Started Free
+                    </a>
+                    <a href="/features" class="btn btn-outline-white">See All Features</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="logo">
+                        <img src="/static/img/sdcs_logo.png" alt="SDCS Ledger Logo">
+                        <span>SDCS <span class="logo-accent">Ledger</span></span>
+                    </a>
+                    <p>Empowering African merchants with simple, reliable financial record-keeping through WhatsApp.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="/features">Features</a></li>
+                        <li><a href="/pricing">Pricing</a></li>
+                        <li><a href="/#how-it-works">How It Works</a></li>
+                        <li><a href="/my-ledger">Dashboard Login</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="/#faq">FAQ</a></li>
+                        <li><a href="https://wa.me/{{ bot_phone }}" target="_blank">WhatsApp Support</a></li>
+                        <li><a href="mailto:info@sdcsledger.com">Email Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SDCS Ledger. All rights reserved.</p>
+                <div style="display:flex; gap:1.5rem;">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="/contact">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+        navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+        navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => navLinks.classList.remove('open')));
+    </script>
+</body>
+</html>

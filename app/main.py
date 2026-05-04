@@ -59,8 +59,36 @@ app.include_router(user_router)
 @app.get("/")
 def read_root(request: Request):
     bot_phone = os.getenv("WHATSAPP_PHONE_NUMBER", "234...")
-    return templates.TemplateResponse(
-        request=request,
-        name="index.html",
-        context={"bot_phone": bot_phone}
-    )
+    return templates.TemplateResponse(request=request, name="index.html", context={"bot_phone": bot_phone})
+
+
+@app.get("/features")
+def features_page(request: Request):
+    bot_phone = os.getenv("WHATSAPP_PHONE_NUMBER", "234...")
+    return templates.TemplateResponse(request=request, name="features.html", context={"bot_phone": bot_phone})
+
+
+@app.get("/pricing")
+def pricing_page(request: Request):
+    bot_phone = os.getenv("WHATSAPP_PHONE_NUMBER", "234...")
+    return templates.TemplateResponse(request=request, name="pricing.html", context={"bot_phone": bot_phone})
+
+
+@app.get("/about")
+def about_page(request: Request):
+    bot_phone = os.getenv("WHATSAPP_PHONE_NUMBER", "234...")
+    return templates.TemplateResponse(request=request, name="about.html", context={"bot_phone": bot_phone})
+
+
+@app.get("/contact")
+def contact_page(request: Request, success: bool = False):
+    bot_phone = os.getenv("WHATSAPP_PHONE_NUMBER", "234...")
+    return templates.TemplateResponse(request=request, name="contact.html", context={"bot_phone": bot_phone, "success": success})
+
+
+@app.post("/contact")
+async def contact_submit(request: Request):
+    # Form data received — for now just redirect back with success flag.
+    # A future iteration can forward this to email or a CRM.
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse("/contact?success=true", status_code=303)
