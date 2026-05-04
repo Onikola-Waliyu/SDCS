@@ -3,285 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SDCS Ledger — Track Your Business Sales on WhatsApp</title>
-    <meta name="description" content="Record your sales by sending a WhatsApp message. SDCS Ledger automatically organises your records and gives you a live dashboard — no spreadsheets needed.">
+    <title>SDCS Ledger — WhatsApp Sales Tracking for African Businesses</title>
+    <meta name="description" content="Record your sales on WhatsApp. SDCS Ledger organises your transactions and gives you a live business dashboard — automatically.">
     <link rel="stylesheet" href="/static/css/home.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="/static/img/sdcs_logo.png">
 </head>
 <body>
 
-    <!-- Navigation -->
-    <header>
-        <nav>
-            <div class="container nav-container">
-                <a href="/" class="logo">
-                    <img src="/static/img/sdcs_logo.png" alt="SDCS Ledger Logo">
-                    <span>SDCS <span class="logo-accent">Ledger</span></span>
+<header>
+    <nav>
+        <div class="container nav-wrap">
+            <a href="/" class="logo">
+                <img src="/static/img/sdcs_logo.png" alt="SDCS Ledger">
+                <span>SDCS <span class="logo-dot">Ledger</span></span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/" class="active">Home</a></li>
+                <li><a href="/#how-it-works">How It Works</a></li>
+                <li><a href="/features">Features</a></li>
+                <li><a href="/pricing">Pricing</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+            <div class="nav-right">
+                <a href="/my-ledger" class="nav-login">Log in</a>
+                <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary">
+                    <i class="fa-brands fa-whatsapp"></i> Get started
                 </a>
+            </div>
+            <button class="nav-toggle" id="navToggle"><i class="fa-solid fa-bars"></i></button>
+        </div>
+    </nav>
+</header>
 
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="/" class="active">Home</a></li>
-                    <li><a href="#how-it-works">How It Works</a></li>
+<main>
+
+    <!-- Hero -->
+    <section class="hero" id="home">
+        <div class="container hero-grid">
+            <div>
+                <span class="hero-eyebrow">WhatsApp Sales Tracking</span>
+                <h1>Know exactly what your business is making — every day.</h1>
+                <div class="hero-sub">
+                    <p>Your staff send a simple WhatsApp message. SDCS Ledger records the sale, structures the data, and updates your dashboard — automatically.</p>
+                </div>
+                <div class="hero-btns">
+                    <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary btn-lg">
+                        <i class="fa-brands fa-whatsapp"></i> Start free
+                    </a>
+                    <a href="#how-it-works" class="btn btn-ghost btn-lg">See how it works</a>
+                </div>
+            </div>
+            <div class="hero-card">
+                <p class="hero-card-label">Live WhatsApp example</p>
+                <div class="chat-msg chat-out">"Sold 3 bags of rice for 45,000"</div>
+                <div class="chat-msg chat-in">
+                    <p>✅ <strong>Recorded.</strong><br>
+                    3 × Rice &nbsp;·&nbsp; ₦45,000.00<br>
+                    Recorded by: Staff · 2:14 PM</p>
+                    <p class="meta">View on dashboard →</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <div class="stats-strip">
+        <div class="container stats-inner">
+            <div class="stat"><strong>500+</strong><span>Active merchants</span></div>
+            <div class="stat"><strong>₦2.3M+</strong><span>Sales recorded</span></div>
+            <div class="stat"><strong>3 steps</strong><span>To get started</span></div>
+            <div class="stat"><strong>Zero</strong><span>Spreadsheets needed</span></div>
+        </div>
+    </div>
+
+    <!-- How it works -->
+    <section id="how-it-works">
+        <div class="container">
+            <span class="label">How it works</span>
+            <h2 class="section-title">Three steps. No training required.</h2>
+            <p class="section-sub">If your staff can send a WhatsApp message, they can use SDCS Ledger from day one.</p>
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-n">1</div>
+                    <h3>Record the sale</h3>
+                    <p>Staff send a message on WhatsApp — item, quantity, amount. No forms. No app to open.</p>
+                </div>
+                <div class="step">
+                    <div class="step-n">2</div>
+                    <h3>Automatic processing</h3>
+                    <p>SDCS Ledger reads the message, extracts the details, and saves a structured transaction record instantly.</p>
+                </div>
+                <div class="step">
+                    <div class="step-n">3</div>
+                    <h3>View your dashboard</h3>
+                    <p>Log in to your web dashboard to see daily revenue, top products, and staff performance in real time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use cases -->
+    <section class="alt-bg" id="use-cases">
+        <div class="container">
+            <span class="label">Who it's for</span>
+            <h2 class="section-title">Built for businesses at every scale</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon"><i class="fa-solid fa-store"></i></div>
+                    <h3>Shop owners</h3>
+                    <p>Replace paper notebooks with instant digital records. Know your daily sales without end-of-day calculations.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon"><i class="fa-solid fa-truck-ramp-box"></i></div>
+                    <h3>Market traders</h3>
+                    <p>Record sales on the move through WhatsApp, even in the busiest market environments.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon"><i class="fa-solid fa-network-wired"></i></div>
+                    <h3>Multi-branch owners</h3>
+                    <p>Manage multiple locations from one dashboard. See each branch without calling every hour.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials">
+        <div class="container">
+            <span class="label">What merchants say</span>
+            <h2 class="section-title">Trusted by businesses across Nigeria</h2>
+            <div class="cards-grid" style="margin-top:3rem;">
+                <div class="testimonial">
+                    <blockquote>"I used to spend an hour at night trying to remember what I sold. Now I know my numbers before I close the shop."</blockquote>
+                    <p class="author">Alhaji Musa — <span>Market trader, Kano</span></p>
+                </div>
+                <div class="testimonial">
+                    <blockquote>"Monitoring all three of my branches from home is now possible. No more stories from staff — everything is on the dashboard."</blockquote>
+                    <p class="author">Mrs. Oluchi — <span>Boutique owner, Onitsha</span></p>
+                </div>
+                <div class="testimonial">
+                    <blockquote>"My staff didn't need any training. They already knew how to send WhatsApp messages. That's all they do."</blockquote>
+                    <p class="author">Segun — <span>Electronics store, Lagos</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="alt-bg" id="faq">
+        <div class="container">
+            <span class="label">FAQ</span>
+            <h2 class="section-title">Common questions</h2>
+            <div class="faq-item"><h4>Do my staff need to download anything?</h4><p>No. All they need is WhatsApp, which they already have. Sales are recorded by sending a message.</p></div>
+            <div class="faq-item"><h4>What if staff write the message differently each time?</h4><p>The system understands natural language. "Sold 2 bags rice 10k" works just as well as "2 bags of rice for 10,000".</p></div>
+            <div class="faq-item"><h4>Can I use it for multiple branches?</h4><p>Yes. Assign staff to branches and see each location's performance from one dashboard.</p></div>
+            <div class="faq-item"><h4>Is my financial data secure?</h4><p>Yes. Data is stored on encrypted servers and accessible only through your authenticated account.</p></div>
+            <div class="faq-item"><h4>How do I get started?</h4><p>Click "Get started", message our bot on WhatsApp, and follow the brief setup. It takes under two minutes.</p></div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-band">
+        <div class="container">
+            <h2>Start tracking your sales the right way.</h2>
+            <p>No credit card. No spreadsheets. Set up in under two minutes on WhatsApp.</p>
+            <div class="btn-group">
+                <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary btn-lg">
+                    <i class="fa-brands fa-whatsapp"></i> Get started free
+                </a>
+                <a href="/contact" class="btn btn-ghost btn-lg">Talk to us</a>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="/" class="logo"><img src="/static/img/sdcs_logo.png" alt="SDCS Ledger"><span>SDCS <span class="logo-dot">Ledger</span></span></a>
+                <p>Simple, reliable sales tracking for African merchants — powered by WhatsApp.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Product</h4>
+                <ul>
                     <li><a href="/features">Features</a></li>
                     <li><a href="/pricing">Pricing</a></li>
+                    <li><a href="/#how-it-works">How It Works</a></li>
+                    <li><a href="/my-ledger">Dashboard login</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
                     <li><a href="/about">About</a></li>
                     <li><a href="/contact">Contact</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
                 </ul>
-
-                <div class="nav-cta">
-                    <a href="/my-ledger" class="login-link">Log In</a>
-                    <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary">
-                        <i class="fa-brands fa-whatsapp"></i> Get Started
-                    </a>
-                </div>
-
-                <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
             </div>
-        </nav>
-    </header>
-
-    <main>
-        <!-- Hero Section -->
-        <section class="hero" id="home">
-            <div class="container hero-grid">
-                <div class="hero-content">
-                    <span class="eyebrow">WhatsApp-Powered Sales Tracking</span>
-                    <h1>Know exactly what your business is making — every day.</h1>
-                    <p>Your staff send a simple WhatsApp message. SDCS Ledger records the sale, organises the data, and updates your dashboard automatically.</p>
-                    <div class="hero-btns">
-                        <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary">
-                            <i class="fa-brands fa-whatsapp"></i> Start Tracking Free
-                        </a>
-                        <a href="#how-it-works" class="btn btn-outline-white">See How It Works</a>
-                    </div>
-                </div>
-
-                <div class="hero-panel">
-                    <p class="hero-panel-title">Live Example — WhatsApp Chat</p>
-                    <div class="wa-message">
-                        "Sold 3 bags of rice for 45,000 naira"
-                    </div>
-                    <div class="wa-reply">
-                        <p>✅ <strong>Recorded!</strong></p>
-                        <p>3 bags of Rice — ₦45,000.00</p>
-                        <p style="font-size:0.8125rem; margin-top:0.5rem; color:rgba(255,255,255,0.55);">Logged by: Staff · 2:14 PM</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Stats Bar -->
-        <div class="stat-bar">
-            <div class="container stat-bar-inner">
-                <div class="stat-item">
-                    <strong>500+</strong>
-                    <span>Active Merchants</span>
-                </div>
-                <div class="stat-item">
-                    <strong>₦2.3M+</strong>
-                    <span>Sales Recorded</span>
-                </div>
-                <div class="stat-item">
-                    <strong>3 Steps</strong>
-                    <span>To Get Started</span>
-                </div>
-                <div class="stat-item">
-                    <strong>Zero</strong>
-                    <span>Spreadsheets Needed</span>
-                </div>
+            <div class="footer-col">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="/#faq">FAQ</a></li>
+                    <li><a href="https://wa.me/{{ bot_phone }}" target="_blank">WhatsApp Support</a></li>
+                    <li><a href="mailto:info@sdcsledger.com">info@sdcsledger.com</a></li>
+                </ul>
             </div>
         </div>
-
-        <!-- How It Works -->
-        <section class="how-it-works" id="how-it-works">
-            <div class="container">
-                <span class="section-label">Simple Process</span>
-                <h2 class="section-title">How SDCS Ledger Works</h2>
-                <p class="section-intro">No training required. If your staff can send a WhatsApp message, they can use SDCS Ledger.</p>
-
-                <div class="steps-row">
-                    <div class="step">
-                        <div class="step-num">1</div>
-                        <h3>Record the Sale</h3>
-                        <p>Your staff send a message on WhatsApp — item name, quantity, and amount. Just like they would text a friend. No forms, no apps to open.</p>
-                    </div>
-                    <div class="step">
-                        <div class="step-num">2</div>
-                        <h3>Automatic Processing</h3>
-                        <p>SDCS Ledger reads the message, extracts the details, and saves the transaction instantly. Every sale is converted into a structured record.</p>
-                    </div>
-                    <div class="step">
-                        <div class="step-num">3</div>
-                        <h3>View Your Dashboard</h3>
-                        <p>Log in to your web dashboard to see your daily revenue, top products, and staff performance — updated in real time, from any device.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Use Cases -->
-        <section class="use-cases" id="use-cases">
-            <div class="container">
-                <span class="section-label">Who It's For</span>
-                <h2 class="section-title">Built for Businesses at Every Scale</h2>
-                <p class="section-intro">From a single-person shop to a business with multiple branches and staff, SDCS Ledger fits your operation.</p>
-
-                <div class="use-cases-grid">
-                    <div class="use-case-card">
-                        <div class="icon"><i class="fa-solid fa-store"></i></div>
-                        <h3>Shop Owners</h3>
-                        <p>Replace paper notebooks with instant digital records. Know your daily sales without doing end-of-day calculations.</p>
-                    </div>
-                    <div class="use-case-card">
-                        <div class="icon"><i class="fa-solid fa-truck-ramp-box"></i></div>
-                        <h3>Market Traders</h3>
-                        <p>Record sales on the move through WhatsApp, even in the busiest market conditions. No slowing down.</p>
-                    </div>
-                    <div class="use-case-card">
-                        <div class="icon"><i class="fa-solid fa-network-wired"></i></div>
-                        <h3>Multi-Branch Owners</h3>
-                        <p>Manage multiple locations from one dashboard. See what each branch is selling without calling them every hour.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Testimonials -->
-        <section class="testimonials" id="testimonials">
-            <div class="container">
-                <span class="section-label">What Merchants Say</span>
-                <h2 class="section-title">Trusted Across Nigeria</h2>
-
-                <div class="testimonials-grid">
-                    <div class="testimonial-card">
-                        <blockquote>"I used to spend an hour at night trying to remember what I sold. Now I know my numbers before I close the shop."</blockquote>
-                        <p class="author">Alhaji Musa — <span>Market Trader, Kano</span></p>
-                    </div>
-                    <div class="testimonial-card">
-                        <blockquote>"Monitoring all three of my branches from home is now possible. No more stories from staff — everything is on the dashboard."</blockquote>
-                        <p class="author">Mrs. Oluchi — <span>Boutique Owner, Onitsha</span></p>
-                    </div>
-                    <div class="testimonial-card">
-                        <blockquote>"My staff didn't need any training. They already knew how to send WhatsApp messages. That's all they do."</blockquote>
-                        <p class="author">Segun — <span>Electronics Store, Lagos</span></p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FAQ -->
-        <section class="faq" id="faq">
-            <div class="container">
-                <span class="section-label">FAQ</span>
-                <h2 class="section-title">Common Questions</h2>
-
-                <div class="faq-list">
-                    <div class="faq-item">
-                        <h4>Do my staff need to download anything?</h4>
-                        <p>No. All they need is WhatsApp, which they already have. Sales are recorded by sending a normal text message to the business number.</p>
-                    </div>
-                    <div class="faq-item">
-                        <h4>What if my staff write differently each time?</h4>
-                        <p>The system understands natural language. Whether they write "sold 2 bags rice 10k" or "2 bags of rice for 10,000", it processes the entry correctly.</p>
-                    </div>
-                    <div class="faq-item">
-                        <h4>Can I use it for multiple shop branches?</h4>
-                        <p>Yes. You can assign different staff to different branches, and the dashboard shows performance per location, all from one account.</p>
-                    </div>
-                    <div class="faq-item">
-                        <h4>Is my financial data secure?</h4>
-                        <p>Yes. Your data is stored securely on encrypted servers and is only accessible through your authenticated account.</p>
-                    </div>
-                    <div class="faq-item">
-                        <h4>How do I get started?</h4>
-                        <p>Click "Get Started", send a first message to our WhatsApp bot, and follow the brief setup. It takes under two minutes.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CTA -->
-        <section class="cta-section" id="contact">
-            <div class="container">
-                <h2>Start tracking your sales the right way.</h2>
-                <p>You don't need to change how you sell. You just need a better way to record it.</p>
-                <div class="cta-btns">
-                    <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary">
-                        <i class="fa-brands fa-whatsapp"></i> Get Started on WhatsApp
-                    </a>
-                    <a href="/contact" class="btn btn-outline-white">Talk to Us</a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <a href="/" class="logo">
-                        <img src="/static/img/sdcs_logo.png" alt="SDCS Ledger Logo">
-                        <span>SDCS <span class="logo-accent">Ledger</span></span>
-                    </a>
-                    <p>Empowering African merchants with simple, reliable financial record-keeping through WhatsApp.</p>
-                </div>
-                <div class="footer-col">
-                    <h4>Product</h4>
-                    <ul>
-                        <li><a href="/features">Features</a></li>
-                        <li><a href="/pricing">Pricing</a></li>
-                        <li><a href="#how-it-works">How It Works</a></li>
-                        <li><a href="/my-ledger">Dashboard Login</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Company</h4>
-                    <ul>
-                        <li><a href="/about">About Us</a></li>
-                        <li><a href="/contact">Contact</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Support</h4>
-                    <ul>
-                        <li><a href="#faq">FAQ</a></li>
-                        <li><a href="https://wa.me/{{ bot_phone }}" target="_blank">WhatsApp Support</a></li>
-                        <li><a href="mailto:info@sdcsledger.com">Email Us</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 SDCS Ledger. All rights reserved.</p>
-                <div style="display:flex; gap:1.5rem;">
-                    <a href="#">Privacy</a>
-                    <a href="#">Terms</a>
-                    <a href="mailto:info@sdcsledger.com">Contact</a>
-                </div>
-            </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SDCS Ledger. All rights reserved.</p>
+            <div><a href="#">Privacy</a><a href="#">Terms</a><a href="/contact">Contact</a></div>
         </div>
-    </footer>
+    </div>
+</footer>
 
-    <script>
-        // Mobile nav toggle
-        const navToggle = document.getElementById('navToggle');
-        const navLinks = document.getElementById('navLinks');
-
-        navToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('open');
-        });
-
-        // Close nav when a link is clicked on mobile
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('open');
-            });
-        });
-    </script>
+<script>
+    const t = document.getElementById('navToggle');
+    const n = document.getElementById('navLinks');
+    t.addEventListener('click', () => n.classList.toggle('open'));
+    n.querySelectorAll('a').forEach(a => a.addEventListener('click', () => n.classList.remove('open')));
+</script>
 </body>
 </html>

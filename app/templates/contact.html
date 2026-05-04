@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact — SDCS Ledger</title>
     <meta name="description" content="Get in touch with the SDCS Ledger team. We respond to all enquiries within one business day.">
     <link rel="stylesheet" href="/static/css/home.css">
@@ -10,177 +9,111 @@
     <link rel="icon" type="image/png" href="/static/img/sdcs_logo.png">
 </head>
 <body>
+<header><nav><div class="container nav-wrap">
+    <a href="/" class="logo"><img src="/static/img/sdcs_logo.png" alt="SDCS Ledger"><span>SDCS <span class="logo-dot">Ledger</span></span></a>
+    <ul class="nav-links" id="navLinks">
+        <li><a href="/">Home</a></li><li><a href="/#how-it-works">How It Works</a></li>
+        <li><a href="/features">Features</a></li><li><a href="/pricing">Pricing</a></li>
+        <li><a href="/about">About</a></li><li><a href="/contact" class="active">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+        <a href="/my-ledger" class="nav-login">Log in</a>
+        <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary"><i class="fa-brands fa-whatsapp"></i> Get started</a>
+    </div>
+    <button class="nav-toggle" id="navToggle"><i class="fa-solid fa-bars"></i></button>
+</div></nav></header>
 
-    <header>
-        <nav>
-            <div class="container nav-container">
-                <a href="/" class="logo">
-                    <img src="/static/img/sdcs_logo.png" alt="SDCS Ledger Logo">
-                    <span>SDCS <span class="logo-accent">Ledger</span></span>
-                </a>
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/#how-it-works">How It Works</a></li>
-                    <li><a href="/features">Features</a></li>
-                    <li><a href="/pricing">Pricing</a></li>
-                    <li><a href="/about">About</a></li>
-                    <li><a href="/contact" class="active">Contact</a></li>
-                </ul>
-                <div class="nav-cta">
-                    <a href="/my-ledger" class="login-link">Log In</a>
-                    <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary">
-                        <i class="fa-brands fa-whatsapp"></i> Get Started
-                    </a>
+<main>
+<section class="page-hero">
+    <div class="container">
+        <span class="label">Contact</span>
+        <h1>Get in touch</h1>
+        <p>Have a question, want a demo, or need help with your account? We'll get back to you the same day.</p>
+    </div>
+</section>
+
+<section>
+    <div class="container contact-grid">
+        <div>
+            <h2 class="section-title" style="font-size:1.5rem;margin-bottom:1.75rem;">Send us a message</h2>
+            {% if success %}
+            <div class="alert-success">✓ &nbsp;Message sent. We'll get back to you shortly.</div>
+            {% endif %}
+            <form class="contact-form" action="/contact" method="POST">
+                <div class="form-group">
+                    <label for="name">Full name</label>
+                    <input type="text" id="name" name="name" placeholder="e.g. Chukwuma Obi" required>
                 </div>
-                <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-            </div>
-        </nav>
-    </header>
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone / WhatsApp number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="e.g. 08012345678">
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <select id="subject" name="subject">
+                        <option value="">Select a topic...</option>
+                        <option value="general">General enquiry</option>
+                        <option value="demo">Request a demo</option>
+                        <option value="pricing">Pricing &amp; plans</option>
+                        <option value="technical">Technical support</option>
+                        <option value="enterprise">Enterprise / custom</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" placeholder="Tell us how we can help..." required></textarea>
+                </div>
+                <div><button type="submit" class="btn btn-primary btn-lg">Send message</button></div>
+            </form>
+        </div>
 
-    <main>
-        <section class="page-hero">
-            <div class="container">
-                <span class="section-label">Contact</span>
-                <h1>Get in touch</h1>
-                <p>Have a question, want a demo, or need help with your account? We'll get back to you the same day.</p>
-            </div>
-        </section>
-
-        <section>
-            <div class="container contact-grid">
+        <div class="contact-box">
+            <h3>Other ways to reach us</h3>
+            <div class="c-item">
+                <span class="ci"><i class="fa-brands fa-whatsapp"></i></span>
                 <div>
-                    <h2 class="section-title" style="font-size:1.5rem; margin-bottom:1.75rem;">Send us a message</h2>
-                    {% if success %}
-                    <div style="background-color:var(--green-light); border:1px solid var(--green); border-radius:4px; padding:1rem 1.25rem; margin-bottom:1.5rem; color:var(--green-dark); font-size:0.9375rem;">
-                        <strong>Message sent.</strong> We'll get back to you shortly.
-                    </div>
-                    {% endif %}
-                    <form class="contact-form" action="/contact" method="POST">
-                        <div class="form-group">
-                            <label for="name">Full Name</label>
-                            <input type="text" id="name" name="name" placeholder="e.g. Chukwuma Obi" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" placeholder="you@example.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">WhatsApp / Phone Number</label>
-                            <input type="tel" id="phone" name="phone" placeholder="e.g. 08012345678">
-                        </div>
-                        <div class="form-group">
-                            <label for="subject">Subject</label>
-                            <select id="subject" name="subject">
-                                <option value="">Select a topic...</option>
-                                <option value="general">General Enquiry</option>
-                                <option value="demo">Request a Demo</option>
-                                <option value="pricing">Pricing & Plans</option>
-                                <option value="technical">Technical Support</option>
-                                <option value="enterprise">Enterprise / Custom</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea id="message" name="message" placeholder="Tell us how we can help..." required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="align-self:flex-start;">Send Message</button>
-                    </form>
-                </div>
-
-                <div class="contact-info">
-                    <h3>Other ways to reach us</h3>
-
-                    <div class="contact-detail">
-                        <span class="c-icon"><i class="fa-brands fa-whatsapp"></i></span>
-                        <div>
-                            <h4>WhatsApp</h4>
-                            <a href="https://wa.me/{{ bot_phone }}" target="_blank">Message us directly</a>
-                            <p>Fastest response — typically within an hour during business hours.</p>
-                        </div>
-                    </div>
-
-                    <div class="contact-detail">
-                        <span class="c-icon"><i class="fa-solid fa-envelope"></i></span>
-                        <div>
-                            <h4>Email</h4>
-                            <a href="mailto:info@sdcsledger.com">info@sdcsledger.com</a>
-                            <p>We respond within one business day.</p>
-                        </div>
-                    </div>
-
-                    <div class="contact-detail">
-                        <span class="c-icon"><i class="fa-solid fa-clock"></i></span>
-                        <div>
-                            <h4>Business Hours</h4>
-                            <p>Monday – Friday: 9am – 6pm WAT</p>
-                            <p>Saturday: 10am – 2pm WAT</p>
-                        </div>
-                    </div>
-
-                    <div style="margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--border);">
-                        <h4 style="font-size:0.9375rem; color:var(--navy); margin-bottom:0.5rem;">For Enterprise Enquiries</h4>
-                        <p style="font-size:0.9rem;">If you're looking to set up SDCS Ledger for a large team or multiple business locations, email us at <a href="mailto:enterprise@sdcsledger.com" style="color:var(--green);">enterprise@sdcsledger.com</a>.</p>
-                    </div>
+                    <h4>WhatsApp</h4>
+                    <a href="https://wa.me/{{ bot_phone }}" target="_blank">Message us directly</a>
+                    <p>Fastest response — usually within an hour during business hours.</p>
                 </div>
             </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <a href="/" class="logo">
-                        <img src="/static/img/sdcs_logo.png" alt="SDCS Ledger Logo">
-                        <span>SDCS <span class="logo-accent">Ledger</span></span>
-                    </a>
-                    <p>Empowering African merchants with simple, reliable financial record-keeping through WhatsApp.</p>
-                </div>
-                <div class="footer-col">
-                    <h4>Product</h4>
-                    <ul>
-                        <li><a href="/features">Features</a></li>
-                        <li><a href="/pricing">Pricing</a></li>
-                        <li><a href="/#how-it-works">How It Works</a></li>
-                        <li><a href="/my-ledger">Dashboard Login</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Company</h4>
-                    <ul>
-                        <li><a href="/about">About Us</a></li>
-                        <li><a href="/contact">Contact</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Support</h4>
-                    <ul>
-                        <li><a href="/#faq">FAQ</a></li>
-                        <li><a href="https://wa.me/{{ bot_phone }}" target="_blank">WhatsApp Support</a></li>
-                        <li><a href="mailto:info@sdcsledger.com">Email Us</a></li>
-                    </ul>
+            <div class="c-item">
+                <span class="ci"><i class="fa-solid fa-envelope"></i></span>
+                <div>
+                    <h4>Email</h4>
+                    <a href="mailto:info@sdcsledger.com">info@sdcsledger.com</a>
+                    <p>We respond within one business day.</p>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 SDCS Ledger. All rights reserved.</p>
-                <div style="display:flex; gap:1.5rem;">
-                    <a href="#">Privacy</a>
-                    <a href="#">Terms</a>
-                    <a href="/contact">Contact</a>
+            <div class="c-item">
+                <span class="ci"><i class="fa-solid fa-clock"></i></span>
+                <div>
+                    <h4>Business hours</h4>
+                    <p>Monday – Friday: 9am – 6pm WAT</p>
+                    <p>Saturday: 10am – 2pm WAT</p>
                 </div>
+            </div>
+            <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border);">
+                <h4 style="font-size:0.875rem;font-weight:600;color:var(--text);margin-bottom:0.4rem;">Enterprise enquiries</h4>
+                <p style="font-size:0.875rem;">For large teams or multi-location setups, email <a href="mailto:enterprise@sdcsledger.com" style="color:var(--green);">enterprise@sdcsledger.com</a>.</p>
             </div>
         </div>
-    </footer>
+    </div>
+</section>
+</main>
 
-    <script>
-        const navToggle = document.getElementById('navToggle');
-        const navLinks = document.getElementById('navLinks');
-        navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
-        navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => navLinks.classList.remove('open')));
-    </script>
-</body>
-</html>
+<footer><div class="container">
+    <div class="footer-grid">
+        <div class="footer-brand"><a href="/" class="logo"><img src="/static/img/sdcs_logo.png" alt=""><span>SDCS <span class="logo-dot">Ledger</span></span></a><p>Simple, reliable sales tracking for African merchants — powered by WhatsApp.</p></div>
+        <div class="footer-col"><h4>Product</h4><ul><li><a href="/features">Features</a></li><li><a href="/pricing">Pricing</a></li><li><a href="/my-ledger">Dashboard login</a></li></ul></div>
+        <div class="footer-col"><h4>Company</h4><ul><li><a href="/about">About</a></li><li><a href="/contact">Contact</a></li><li><a href="#">Privacy</a></li></ul></div>
+        <div class="footer-col"><h4>Support</h4><ul><li><a href="/#faq">FAQ</a></li><li><a href="mailto:info@sdcsledger.com">Email us</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>&copy; 2026 SDCS Ledger.</p><div><a href="#">Privacy</a><a href="#">Terms</a></div></div>
+</div></footer>
+<script>const t=document.getElementById('navToggle'),n=document.getElementById('navLinks');t.addEventListener('click',()=>n.classList.toggle('open'));n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>n.classList.remove('open')));</script>
+</body></html>

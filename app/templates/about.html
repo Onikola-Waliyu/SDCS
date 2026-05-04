@@ -1,179 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us — SDCS Ledger</title>
-    <meta name="description" content="Learn about SDCS Ledger — who we are, what we do, and why we built a WhatsApp-based sales tracking system for African merchants.">
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About — SDCS Ledger</title>
+    <meta name="description" content="Who we are and why we built SDCS Ledger — simple WhatsApp sales tracking for African merchants.">
     <link rel="stylesheet" href="/static/css/home.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="/static/img/sdcs_logo.png">
 </head>
 <body>
+<header><nav><div class="container nav-wrap">
+    <a href="/" class="logo"><img src="/static/img/sdcs_logo.png" alt="SDCS Ledger"><span>SDCS <span class="logo-dot">Ledger</span></span></a>
+    <ul class="nav-links" id="navLinks">
+        <li><a href="/">Home</a></li><li><a href="/#how-it-works">How It Works</a></li>
+        <li><a href="/features">Features</a></li><li><a href="/pricing">Pricing</a></li>
+        <li><a href="/about" class="active">About</a></li><li><a href="/contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+        <a href="/my-ledger" class="nav-login">Log in</a>
+        <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary"><i class="fa-brands fa-whatsapp"></i> Get started</a>
+    </div>
+    <button class="nav-toggle" id="navToggle"><i class="fa-solid fa-bars"></i></button>
+</div></nav></header>
 
-    <header>
-        <nav>
-            <div class="container nav-container">
-                <a href="/" class="logo">
-                    <img src="/static/img/sdcs_logo.png" alt="SDCS Ledger Logo">
-                    <span>SDCS <span class="logo-accent">Ledger</span></span>
-                </a>
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/#how-it-works">How It Works</a></li>
-                    <li><a href="/features">Features</a></li>
-                    <li><a href="/pricing">Pricing</a></li>
-                    <li><a href="/about" class="active">About</a></li>
-                    <li><a href="/contact">Contact</a></li>
-                </ul>
-                <div class="nav-cta">
-                    <a href="/my-ledger" class="login-link">Log In</a>
-                    <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary">
-                        <i class="fa-brands fa-whatsapp"></i> Get Started
-                    </a>
-                </div>
-                <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-            </div>
-        </nav>
-    </header>
+<main>
+<section class="page-hero">
+    <div class="container">
+        <span class="label">About</span>
+        <h1>We build tools for the everyday African merchant.</h1>
+        <p>SDCS Ledger was built to solve a simple, persistent problem: most small businesses sell every day but have no reliable way to track what they've sold.</p>
+    </div>
+</section>
 
-    <main>
-        <section class="page-hero">
-            <div class="container">
-                <span class="section-label">About Us</span>
-                <h1>We build tools for the everyday African merchant.</h1>
-                <p>SDCS Ledger was built to solve a simple, persistent problem: most small businesses sell every day but have no reliable way to track what they've sold.</p>
-            </div>
-        </section>
+<section>
+    <div class="container about-grid">
+        <div class="about-content">
+            <h2>Why we built this</h2>
+            <p>Across markets, shops, and street-side businesses in Nigeria and across Africa, the pattern is the same. Sales happen fast. Paper records get lost. Memory fails. At the end of the day, owners are left guessing revenue and dealing with discrepancies they can't trace.</p>
+            <p>Accounting software exists, but most of it is complex, expensive, and assumes the user has a computer and the patience to learn a new system. That describes very few of the merchants who need it most.</p>
+            <p>WhatsApp, on the other hand, is already on every phone. Staff already know how to use it. The only missing piece was a system that could listen, understand, and organise what they send.</p>
+            <p>That is what SDCS Ledger does. We turn ordinary WhatsApp messages into structured, searchable business records — automatically, in real time, without requiring staff to change how they work.</p>
 
-        <section>
-            <div class="container about-grid">
-                <div class="about-content">
-                    <h2>Why We Built This</h2>
-                    <p>Across markets, shops, and street-side businesses in Nigeria and across Africa, the pattern is the same. Sales happen fast. Paper records get lost. Memory fails. At the end of the day, owners are left guessing their revenue and dealing with discrepancies they can't trace.</p>
-                    <p>Accounting software exists, but most of it is complex, expensive, and assumes the user has a computer and the patience to learn a new system. That describes very few of the merchants who need it most.</p>
-                    <p>WhatsApp, on the other hand, is already on every phone. Staff already know how to use it. The only missing piece was a system that could listen, understand, and organise what they send.</p>
-                    <p>That is what SDCS Ledger does. We turn ordinary WhatsApp messages into structured, searchable business records — automatically, in real time, without requiring your staff to change how they work.</p>
-
-                    <div class="values-list">
-                        <div class="value-item">
-                            <span class="v-icon"><i class="fa-solid fa-check"></i></span>
-                            <div>
-                                <h4>Simplicity first</h4>
-                                <p>If a tool is difficult to use, people won't use it. Every decision we make starts with making the experience simpler.</p>
-                            </div>
-                        </div>
-                        <div class="value-item">
-                            <span class="v-icon"><i class="fa-solid fa-check"></i></span>
-                            <div>
-                                <h4>Reliability over features</h4>
-                                <p>We would rather do fewer things and do them correctly than build a bloated system that breaks under pressure.</p>
-                            </div>
-                        </div>
-                        <div class="value-item">
-                            <span class="v-icon"><i class="fa-solid fa-check"></i></span>
-                            <div>
-                                <h4>Built for real conditions</h4>
-                                <p>We design for how merchants actually operate — on the move, in fast-paced environments, without formal training.</p>
-                            </div>
-                        </div>
-                    </div>
+            <div class="values">
+                <div class="val">
+                    <span class="val-icon"><i class="fa-solid fa-check"></i></span>
+                    <div><h4>Simplicity first</h4><p>If a tool is difficult to use, people won't use it. Every decision starts with making the experience simpler.</p></div>
                 </div>
-
-                <div class="about-sidebar">
-                    <h3>By the Numbers</h3>
-                    <div class="about-stat">
-                        <strong>500+</strong>
-                        <span>Active businesses using SDCS Ledger</span>
-                    </div>
-                    <div class="about-stat">
-                        <strong>₦2.3M+</strong>
-                        <span>Total sales recorded on the platform</span>
-                    </div>
-                    <div class="about-stat">
-                        <strong>3</strong>
-                        <span>Steps to get fully set up</span>
-                    </div>
-                    <div class="about-stat">
-                        <strong>2026</strong>
-                        <span>Year founded</span>
-                    </div>
-                    <div style="border-top:1px solid rgba(255,255,255,0.15); padding-top:1.5rem; margin-top:0.5rem;">
-                        <p style="font-size:0.875rem; color:rgba(255,255,255,0.6);">We are a Nigerian company, building for Nigerian and African merchants.</p>
-                    </div>
+                <div class="val">
+                    <span class="val-icon"><i class="fa-solid fa-check"></i></span>
+                    <div><h4>Reliability over features</h4><p>We would rather do fewer things correctly than build a bloated system that breaks under pressure.</p></div>
                 </div>
-            </div>
-        </section>
-
-        <section class="cta-section">
-            <div class="container">
-                <h2>Join the merchants already using SDCS Ledger.</h2>
-                <p>Set up takes less than two minutes. No technical knowledge required.</p>
-                <div class="cta-btns">
-                    <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary">
-                        <i class="fa-brands fa-whatsapp"></i> Get Started
-                    </a>
-                    <a href="/contact" class="btn btn-outline-white">Contact Us</a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <a href="/" class="logo">
-                        <img src="/static/img/sdcs_logo.png" alt="SDCS Ledger Logo">
-                        <span>SDCS <span class="logo-accent">Ledger</span></span>
-                    </a>
-                    <p>Empowering African merchants with simple, reliable financial record-keeping through WhatsApp.</p>
-                </div>
-                <div class="footer-col">
-                    <h4>Product</h4>
-                    <ul>
-                        <li><a href="/features">Features</a></li>
-                        <li><a href="/pricing">Pricing</a></li>
-                        <li><a href="/#how-it-works">How It Works</a></li>
-                        <li><a href="/my-ledger">Dashboard Login</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Company</h4>
-                    <ul>
-                        <li><a href="/about">About Us</a></li>
-                        <li><a href="/contact">Contact</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Support</h4>
-                    <ul>
-                        <li><a href="/#faq">FAQ</a></li>
-                        <li><a href="https://wa.me/{{ bot_phone }}" target="_blank">WhatsApp Support</a></li>
-                        <li><a href="mailto:info@sdcsledger.com">Email Us</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 SDCS Ledger. All rights reserved.</p>
-                <div style="display:flex; gap:1.5rem;">
-                    <a href="#">Privacy</a>
-                    <a href="#">Terms</a>
-                    <a href="/contact">Contact</a>
+                <div class="val">
+                    <span class="val-icon"><i class="fa-solid fa-check"></i></span>
+                    <div><h4>Built for real conditions</h4><p>We design for how merchants actually operate — on the move, in fast-paced environments, without formal training.</p></div>
                 </div>
             </div>
         </div>
-    </footer>
 
-    <script>
-        const navToggle = document.getElementById('navToggle');
-        const navLinks = document.getElementById('navLinks');
-        navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
-        navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => navLinks.classList.remove('open')));
-    </script>
-</body>
-</html>
+        <div class="about-box">
+            <h3>By the numbers</h3>
+            <div class="a-stat"><strong>500+</strong><span>Active businesses on SDCS Ledger</span></div>
+            <div class="a-stat"><strong>₦2.3M+</strong><span>Total sales recorded</span></div>
+            <div class="a-stat"><strong>3</strong><span>Steps to get fully set up</span></div>
+            <div class="a-stat"><strong>2026</strong><span>Year founded</span></div>
+            <div style="border-top:1px solid rgba(255,255,255,0.12);padding-top:1.25rem;margin-top:0.5rem;">
+                <p style="font-size:0.875rem;color:rgba(255,255,255,0.5);">A Nigerian company, building for Nigerian and African merchants.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-band">
+    <div class="container">
+        <h2>Join the merchants already using SDCS Ledger.</h2>
+        <p>Set up takes less than two minutes. No technical knowledge required.</p>
+        <div class="btn-group">
+            <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary btn-lg"><i class="fa-brands fa-whatsapp"></i> Get started</a>
+            <a href="/contact" class="btn btn-ghost btn-lg">Contact us</a>
+        </div>
+    </div>
+</section>
+</main>
+
+<footer><div class="container">
+    <div class="footer-grid">
+        <div class="footer-brand"><a href="/" class="logo"><img src="/static/img/sdcs_logo.png" alt=""><span>SDCS <span class="logo-dot">Ledger</span></span></a><p>Simple, reliable sales tracking for African merchants — powered by WhatsApp.</p></div>
+        <div class="footer-col"><h4>Product</h4><ul><li><a href="/features">Features</a></li><li><a href="/pricing">Pricing</a></li><li><a href="/my-ledger">Dashboard login</a></li></ul></div>
+        <div class="footer-col"><h4>Company</h4><ul><li><a href="/about">About</a></li><li><a href="/contact">Contact</a></li><li><a href="#">Privacy</a></li></ul></div>
+        <div class="footer-col"><h4>Support</h4><ul><li><a href="/#faq">FAQ</a></li><li><a href="mailto:info@sdcsledger.com">Email us</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>&copy; 2026 SDCS Ledger.</p><div><a href="#">Privacy</a><a href="#">Terms</a></div></div>
+</div></footer>
+<script>const t=document.getElementById('navToggle'),n=document.getElementById('navLinks');t.addEventListener('click',()=>n.classList.toggle('open'));n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>n.classList.remove('open')));</script>
+</body></html>

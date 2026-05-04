@@ -1,175 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Features — SDCS Ledger</title>
-    <meta name="description" content="Explore the features that make SDCS Ledger the simplest way to track your business sales through WhatsApp.">
+    <meta name="description" content="Everything SDCS Ledger does to help you track sales, manage staff, and run your business better.">
     <link rel="stylesheet" href="/static/css/home.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="/static/img/sdcs_logo.png">
 </head>
 <body>
+<header><nav><div class="container nav-wrap">
+    <a href="/" class="logo"><img src="/static/img/sdcs_logo.png" alt="SDCS Ledger"><span>SDCS <span class="logo-dot">Ledger</span></span></a>
+    <ul class="nav-links" id="navLinks">
+        <li><a href="/">Home</a></li><li><a href="/#how-it-works">How It Works</a></li>
+        <li><a href="/features" class="active">Features</a></li><li><a href="/pricing">Pricing</a></li>
+        <li><a href="/about">About</a></li><li><a href="/contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+        <a href="/my-ledger" class="nav-login">Log in</a>
+        <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary"><i class="fa-brands fa-whatsapp"></i> Get started</a>
+    </div>
+    <button class="nav-toggle" id="navToggle"><i class="fa-solid fa-bars"></i></button>
+</div></nav></header>
 
-    <header>
-        <nav>
-            <div class="container nav-container">
-                <a href="/" class="logo">
-                    <img src="/static/img/sdcs_logo.png" alt="SDCS Ledger Logo">
-                    <span>SDCS <span class="logo-accent">Ledger</span></span>
-                </a>
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/#how-it-works">How It Works</a></li>
-                    <li><a href="/features" class="active">Features</a></li>
-                    <li><a href="/pricing">Pricing</a></li>
-                    <li><a href="/about">About</a></li>
-                    <li><a href="/contact">Contact</a></li>
-                </ul>
-                <div class="nav-cta">
-                    <a href="/my-ledger" class="login-link">Log In</a>
-                    <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary">
-                        <i class="fa-brands fa-whatsapp"></i> Get Started
-                    </a>
-                </div>
-                <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-            </div>
-        </nav>
-    </header>
+<main>
+<section class="page-hero">
+    <div class="container">
+        <span class="label">Features</span>
+        <h1>Everything you need to run a tighter business</h1>
+        <p>Practical tools to record sales, track performance, and stay in control — without complicating how you already work.</p>
+    </div>
+</section>
 
-    <main>
-        <section class="page-hero">
-            <div class="container">
-                <span class="section-label">Features</span>
-                <h1>Everything you need to run a tighter business</h1>
-                <p>SDCS Ledger gives you practical tools to record sales, monitor performance, and stay in control — without complicating how you already work.</p>
-            </div>
-        </section>
-
-        <section>
-            <div class="container">
-                <span class="section-label">Core Features</span>
-                <h2 class="section-title">What SDCS Ledger Does</h2>
-
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feat-icon"><i class="fa-brands fa-whatsapp"></i></div>
-                        <h3>WhatsApp Sales Recording</h3>
-                        <p>Record sales by sending a message. Your staff don't need to learn new software — they just text the sale as they would normally describe it.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feat-icon"><i class="fa-solid fa-layer-group"></i></div>
-                        <h3>Batch Sales Entry</h3>
-                        <p>In a rush? Send multiple sales in one message. The system reads each line separately and records them all at once.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feat-icon"><i class="fa-solid fa-chart-line"></i></div>
-                        <h3>Live Sales Dashboard</h3>
-                        <p>A clean web dashboard that shows your total revenue, daily performance, average sale value, and full transaction history — updated as sales come in.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feat-icon"><i class="fa-solid fa-users"></i></div>
-                        <h3>Staff Management</h3>
-                        <p>Add your sales staff to the system. Each sale they record is attributed to them, so you know who sold what without asking.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feat-icon"><i class="fa-solid fa-arrow-rotate-left"></i></div>
-                        <h3>Return & Refund Tracking</h3>
-                        <p>If a customer returns a product, mark the transaction as returned directly from the dashboard. The sale is removed from revenue without deleting the audit record.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feat-icon"><i class="fa-solid fa-filter"></i></div>
-                        <h3>Date Filtering</h3>
-                        <p>Filter your sales by today, this week, this month, or any custom date range. Useful for weekly reviews and month-end summaries.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feat-icon"><i class="fa-solid fa-file-export"></i></div>
-                        <h3>CSV & PDF Export</h3>
-                        <p>Download your transaction records as a spreadsheet or a formatted PDF report at any time. Share it with your accountant or keep it for your records.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feat-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
-                        <h3>Transaction Search</h3>
-                        <p>Search your ledger by item name, customer, or amount. Quickly find specific transactions without scrolling through the full list.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feat-icon"><i class="fa-solid fa-network-wired"></i></div>
-                        <h3>Multi-Branch Support</h3>
-                        <p>Manage multiple shop locations under one account. Each branch has its own staff, and all sales are visible on your unified dashboard.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="cta-section">
-            <div class="container">
-                <h2>Ready to get started?</h2>
-                <p>Set up your account in under two minutes. No credit card needed.</p>
-                <div class="cta-btns">
-                    <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary">
-                        <i class="fa-brands fa-whatsapp"></i> Start on WhatsApp
-                    </a>
-                    <a href="/pricing" class="btn btn-outline-white">View Pricing</a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <a href="/" class="logo">
-                        <img src="/static/img/sdcs_logo.png" alt="SDCS Ledger Logo">
-                        <span>SDCS <span class="logo-accent">Ledger</span></span>
-                    </a>
-                    <p>Empowering African merchants with simple, reliable financial record-keeping through WhatsApp.</p>
-                </div>
-                <div class="footer-col">
-                    <h4>Product</h4>
-                    <ul>
-                        <li><a href="/features">Features</a></li>
-                        <li><a href="/pricing">Pricing</a></li>
-                        <li><a href="/#how-it-works">How It Works</a></li>
-                        <li><a href="/my-ledger">Dashboard Login</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Company</h4>
-                    <ul>
-                        <li><a href="/about">About Us</a></li>
-                        <li><a href="/contact">Contact</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Support</h4>
-                    <ul>
-                        <li><a href="/#faq">FAQ</a></li>
-                        <li><a href="https://wa.me/{{ bot_phone }}" target="_blank">WhatsApp Support</a></li>
-                        <li><a href="mailto:info@sdcsledger.com">Email Us</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 SDCS Ledger. All rights reserved.</p>
-                <div style="display:flex; gap:1.5rem;">
-                    <a href="#">Privacy</a>
-                    <a href="#">Terms</a>
-                    <a href="/contact">Contact</a>
-                </div>
-            </div>
+<section>
+    <div class="container">
+        <span class="label">Core capabilities</span>
+        <h2 class="section-title">What SDCS Ledger does</h2>
+        <div class="feat-grid">
+            <div class="feat-card"><div class="feat-icon"><i class="fa-brands fa-whatsapp"></i></div><h3>WhatsApp recording</h3><p>Staff record sales by sending a message. No app, no form — just text, as they would normally describe a sale.</p></div>
+            <div class="feat-card"><div class="feat-icon"><i class="fa-solid fa-layer-group"></i></div><h3>Batch entries</h3><p>Send multiple sales in one message. Each line is read separately and recorded as an individual transaction.</p></div>
+            <div class="feat-card"><div class="feat-icon"><i class="fa-solid fa-chart-line"></i></div><h3>Live dashboard</h3><p>A web dashboard showing total revenue, daily performance, average sale value, and full transaction history — updated in real time.</p></div>
+            <div class="feat-card"><div class="feat-icon"><i class="fa-solid fa-users"></i></div><h3>Staff management</h3><p>Add your sales staff to the system. Every sale is attributed to the person who recorded it.</p></div>
+            <div class="feat-card"><div class="feat-icon"><i class="fa-solid fa-arrow-rotate-left"></i></div><h3>Return tracking</h3><p>Mark a transaction as returned from the dashboard. The sale is excluded from revenue without deleting the audit record.</p></div>
+            <div class="feat-card"><div class="feat-icon"><i class="fa-solid fa-filter"></i></div><h3>Date filtering</h3><p>Filter sales by today, this week, this month, or any custom date range for reviews and reporting.</p></div>
+            <div class="feat-card"><div class="feat-icon"><i class="fa-solid fa-file-export"></i></div><h3>CSV & PDF export</h3><p>Download transaction records as a spreadsheet or formatted PDF at any time.</p></div>
+            <div class="feat-card"><div class="feat-icon"><i class="fa-solid fa-magnifying-glass"></i></div><h3>Transaction search</h3><p>Search your ledger by item, customer, or amount to find specific transactions quickly.</p></div>
+            <div class="feat-card"><div class="feat-icon"><i class="fa-solid fa-network-wired"></i></div><h3>Multi-branch support</h3><p>Manage multiple locations under one account. Each branch has its own staff and all sales appear on one dashboard.</p></div>
         </div>
-    </footer>
+    </div>
+</section>
 
-    <script>
-        const navToggle = document.getElementById('navToggle');
-        const navLinks = document.getElementById('navLinks');
-        navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
-        navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => navLinks.classList.remove('open')));
-    </script>
-</body>
-</html>
+<section class="cta-band">
+    <div class="container">
+        <h2>Ready to get started?</h2>
+        <p>Set up in under two minutes on WhatsApp. No credit card needed.</p>
+        <div class="btn-group">
+            <a href="https://wa.me/{{ bot_phone }}" target="_blank" class="btn btn-primary btn-lg"><i class="fa-brands fa-whatsapp"></i> Start free</a>
+            <a href="/pricing" class="btn btn-ghost btn-lg">View pricing</a>
+        </div>
+    </div>
+</section>
+</main>
+
+<footer><div class="container">
+    <div class="footer-grid">
+        <div class="footer-brand"><a href="/" class="logo"><img src="/static/img/sdcs_logo.png" alt=""><span>SDCS <span class="logo-dot">Ledger</span></span></a><p>Simple, reliable sales tracking for African merchants — powered by WhatsApp.</p></div>
+        <div class="footer-col"><h4>Product</h4><ul><li><a href="/features">Features</a></li><li><a href="/pricing">Pricing</a></li><li><a href="/my-ledger">Dashboard login</a></li></ul></div>
+        <div class="footer-col"><h4>Company</h4><ul><li><a href="/about">About</a></li><li><a href="/contact">Contact</a></li><li><a href="#">Privacy</a></li></ul></div>
+        <div class="footer-col"><h4>Support</h4><ul><li><a href="/#faq">FAQ</a></li><li><a href="mailto:info@sdcsledger.com">Email us</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>&copy; 2026 SDCS Ledger.</p><div><a href="#">Privacy</a><a href="#">Terms</a></div></div>
+</div></footer>
+<script>const t=document.getElementById('navToggle'),n=document.getElementById('navLinks');t.addEventListener('click',()=>n.classList.toggle('open'));n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>n.classList.remove('open')));</script>
+</body></html>
