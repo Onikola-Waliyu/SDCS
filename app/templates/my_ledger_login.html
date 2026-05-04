@@ -3,108 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SDCS Ledger — Login</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link rel="stylesheet" href="/static/css/index.css">
+    <title>Log in — SDCS Ledger</title>
+    <link rel="stylesheet" href="/static/css/home.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="/static/img/sdcs_logo.png">
     <style>
-        body { display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow: auto; }
-        .login-card {
-            width: 100%;
-            max-width: 420px;
-            padding: 40px;
-            border-radius: 24px;
-            position: relative;
-            z-index: 1;
-        }
-        .login-brand { text-align: center; margin-bottom: 32px; }
-        .login-brand i { font-size: 48px; color: var(--accent-green); display: block; margin-bottom: 12px; }
-        .login-brand h1 { font-size: 1.8rem; font-weight: 700; letter-spacing: -0.03em; }
-        .login-brand p { font-size: 0.9rem; color: var(--text-secondary); margin-top: 6px; }
-        .form-group { margin-bottom: 18px; }
-        .form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
-        .input-wrap {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 12px 16px;
-            transition: border-color 0.2s;
-        }
-        .input-wrap:focus-within { border-color: rgba(37, 211, 102, 0.5); }
-        .input-wrap i { color: var(--text-muted); font-size: 18px; }
-        .input-wrap input {
-            background: none; border: none; outline: none;
-            color: var(--text-primary); font-family: 'Outfit', sans-serif;
-            font-size: 1rem; width: 100%;
-        }
-        .input-wrap input::placeholder { color: var(--text-muted); }
-        .btn-login {
-            width: 100%; padding: 14px;
-            background: linear-gradient(135deg, #25d366, #1da851);
-            color: #fff; font-family: 'Outfit', sans-serif;
-            font-size: 1rem; font-weight: 700;
-            border: none; border-radius: 12px; cursor: pointer;
-            transition: opacity 0.2s, transform 0.2s;
-            margin-top: 8px;
-        }
-        .btn-login:hover { opacity: 0.9; transform: translateY(-1px); }
-        .error-msg {
-            background: rgba(247, 127, 127, 0.1);
-            border: 1px solid rgba(247, 127, 127, 0.3);
-            color: #f77f7f;
-            border-radius: 10px; padding: 12px 16px;
-            font-size: 0.875rem; margin-bottom: 18px;
-            display: flex; align-items: center; gap: 8px;
-        }
-        .footer-hint { text-align: center; margin-top: 24px; color: var(--text-muted); font-size: 0.8rem; line-height: 1.6; }
-        .footer-hint code { color: var(--accent-green); background: rgba(37,211,102,0.1); padding: 2px 6px; border-radius: 4px; }
+        body { background: var(--bg-alt); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .login-wrapper { width: 100%; max-width: 440px; padding: 2rem; }
+        .login-logo { display: flex; justify-content: center; margin-bottom: 2rem; }
+        .login-logo img { width: 3rem; height: 3rem; border-radius: 50%; box-shadow: var(--shadow-sm); }
+        .login-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 2.5rem; box-shadow: var(--shadow-md); }
+        .login-header { text-align: center; margin-bottom: 2rem; }
+        .login-header h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .login-header p { font-size: 0.9375rem; color: var(--muted); }
+        .login-form .form-group { margin-bottom: 1.25rem; }
+        .login-form .form-group label { display: block; font-size: 0.875rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
+        .login-form .input-with-icon { position: relative; }
+        .login-form .input-with-icon i { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--muted); }
+        .login-form .input-with-icon input { width: 100%; padding: 0.75rem 1rem 0.75rem 2.5rem; border: 1px solid var(--border); border-radius: 6px; font-family: var(--font); font-size: 0.9375rem; transition: border-color 0.2s; }
+        .login-form .input-with-icon input:focus { outline: none; border-color: var(--green); }
+        .btn-login { width: 100%; padding: 0.875rem; font-size: 1rem; justify-content: center; margin-top: 0.5rem; }
+        .error-msg { background: #FEF2F2; border: 1px solid #FECACA; color: #DC2626; border-radius: 6px; padding: 0.875rem 1rem; font-size: 0.875rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+        .login-footer { text-align: center; margin-top: 2rem; font-size: 0.875rem; color: var(--muted); }
+        .login-footer code { background: var(--green-bg); color: var(--green-dark); padding: 0.2rem 0.4rem; border-radius: 4px; font-weight: 600; }
+        .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--muted); font-size: 0.875rem; font-weight: 500; transition: color 0.2s; margin-bottom: 2rem; }
+        .back-link:hover { color: var(--text); }
     </style>
 </head>
 <body>
-    <div class="gradient-orb orb-1"></div>
-    <div class="gradient-orb orb-2"></div>
-
-    <div class="login-card glass-panel">
-        <div class="login-brand">
-            <img src="/static/img/sdcs_logo.png" alt="SDCS" style="height: 72px; width: 72px; border-radius: 50%; object-fit: cover; margin: 0 auto 16px; display: block; box-shadow: 0 8px 16px rgba(0,0,0,0.15);">
-            <h1>SDCS Ledger</h1>
-            <p>Sign in to view your personal ledger</p>
+    <div class="login-wrapper">
+        <a href="/" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+        
+        <div class="login-logo">
+            <img src="/static/img/sdcs_logo.png" alt="SDCS Ledger">
         </div>
+        
+        <div class="login-card">
+            <div class="login-header">
+                <h1>Log in to your ledger</h1>
+                <p>Enter your phone number and 4-digit PIN</p>
+            </div>
+            
+            {% if error %}
+            <div class="error-msg">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                {{ error }}
+            </div>
+            {% endif %}
 
-        {% if error %}
-        <div class="error-msg">
-            <i class="ph ph-warning-circle"></i>
-            {{ error }}
+            <form method="POST" action="/api/auth/login" class="login-form">
+                <div class="form-group">
+                    <label>WhatsApp Phone Number</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-phone"></i>
+                        <input type="tel" name="phone" placeholder="e.g. 2348012345678" required autofocus>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>4-Digit PIN</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" name="pin" placeholder="••••" maxlength="4" pattern="\d{4}" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-login">
+                    Access My Ledger
+                </button>
+            </form>
         </div>
-        {% endif %}
-
-        <form method="POST" action="/api/auth/login">
-            <div class="form-group">
-                <label>WhatsApp Phone Number</label>
-                <div class="input-wrap">
-                    <i class="ph ph-phone"></i>
-                    <input type="tel" name="phone" placeholder="e.g. 2348012345678" required autofocus>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>4-Digit PIN</label>
-                <div class="input-wrap">
-                    <i class="ph ph-lock"></i>
-                    <input type="password" name="pin" placeholder="••••" maxlength="4" pattern="\d{4}" required>
-                </div>
-            </div>
-            <button type="submit" class="btn-login">
-                <i class="ph ph-sign-in"></i> Access My Ledger
-            </button>
-        </form>
-
-        <p class="footer-hint">
+        
+        <div class="login-footer">
             Don't have a PIN yet? Message the bot:<br>
             <code>pin 1234</code> (replace 1234 with your chosen PIN)
-        </p>
+        </div>
     </div>
 </body>
 </html>
