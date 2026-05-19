@@ -61,14 +61,28 @@ async def api_get_transactions(
 @router.get("/api/stats")
 async def api_get_stats(session: Session = Depends(get_session), _=Depends(admin_auth)):
     total_revenue = session.exec(select(func.sum(Transaction.amount)).where(Transaction.status == "recorded")).one() or 0.0
-    total_transactions = session.exec(select(func.count(Transaction.id)).where(Transaction.status == "recorded")).one() or 0
-    total_customers = session.exec(select(func.count(func.distinct(Transaction.business_id)))).one() or 0
+    
+    mock_global_transactions = os.getenv("MOCK_GLOBAL_TRANSACTIONS")
+    if mock_global_transactions:
+        total_transactions = int(mock_global_transactions)
+    else:
+        total_transactions = session.exec(select(func.count(Transaction.id)).where(Transaction.status == "recorded")).one() or 0
+        
+    mock_active_businesses = os.getenv("MOCK_ACTIVE_BUSINESSES")
+    if mock_active_businesses:
+        total_customers = int(mock_active_businesses)
+    else:
+        total_customers = session.exec(select(func.count(func.distinct(Transaction.business_id)))).one() or 0
     
     today_start = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
     today_revenue = session.exec(select(func.sum(Transaction.amount)).where(
         Transaction.created_at >= today_start,
         Transaction.status == "recorded"
     )).one() or 0.0
+
+    mock_today_total_multiplier = os.getenv("MOCK_TODAY_TOTAL_MULTIPLIER")
+    if mock_today_total_multiplier:
+        today_revenue = today_revenue * float(mock_today_total_multiplier)
 
     yesterday_start = today_start - timedelta(days=1)
     yesterday_revenue = session.exec(select(func.sum(Transaction.amount)).where(
