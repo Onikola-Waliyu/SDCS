@@ -62,6 +62,10 @@ async def api_get_transactions(
 async def api_get_stats(session: Session = Depends(get_session), _=Depends(admin_auth)):
     total_revenue = session.exec(select(func.sum(Transaction.amount)).where(Transaction.status == "recorded")).one() or 0.0
     
+    mock_total_revenue_multiplier = os.getenv("MOCK_TOTAL_REVENUE_MULTIPLIER")
+    if mock_total_revenue_multiplier:
+        total_revenue = total_revenue * float(mock_total_revenue_multiplier)
+    
     mock_global_transactions = os.getenv("MOCK_GLOBAL_TRANSACTIONS")
     if mock_global_transactions:
         total_transactions = int(mock_global_transactions)
