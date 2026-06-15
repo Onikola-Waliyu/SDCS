@@ -204,6 +204,8 @@ async def my_transactions(
     from_date: Optional[str] = None,
     to_date: Optional[str] = None,
     search: Optional[str] = None,
+    limit: int = 50,
+    offset: int = 0,
     owner: User = Depends(_require_owner),
     session: Session = Depends(get_session),
 ):
@@ -213,18 +215,25 @@ async def my_transactions(
     if to_date:
         end = datetime.fromisoformat(to_date).replace(tzinfo=timezone.utc) + timedelta(days=1)
 
-    q = select(Transaction).where(Transaction.business_id == owner.business_id)
+    # ── Base filter (reused for count and data queries) ─────────────────────────
+    base_filters = [Transaction.business_id == owner.business_id]
     if start:
-        q = q.where(Transaction.created_at >= start)
+        base_filters.append(Transaction.created_at >= start)
     if end:
-        q = q.where(Transaction.created_at < end)
+        base_filters.append(Transaction.created_at < end)
     if search:
         term = f"%{search}%"
-        q = q.where(Transaction.item.ilike(term) | Transaction.customer.ilike(term))
-    q = q.order_by(desc(Transaction.created_at))
-    rows = session.exec(q).all()
+        base_filters.append(Transaction.item.ilike(term) | Transaction.customer.ilike(term))
 
-    # Fetch recorded_by names for display
+    # ── Total count (for "Load More" end detection) ─────────────────────────────
+    count_q = select(func.count(Transaction.id)).where(*base_filters)
+    total_count = session.exec(count_q).one() or 0
+
+    # ── Paginated data query ────────────────────────────────────────────────────
+    q = select(Transaction).where(*base_filters).order_by(desc(Transaction.created_at))
+    rows = session.exec(q.offset(offset).limit(limit)).all()
+
+    # Fetch recorder display names
     result = []
     for tx in rows:
         recorder = session.get(User, tx.recorded_by)
@@ -241,7 +250,13 @@ async def my_transactions(
         })
 
     total_revenue = sum(r["amount"] for r in result if (r["status"] or "recorded") == "recorded")
-    return {"items": result, "total": len(result), "total_revenue": total_revenue}
+    return {
+        "items": result,
+        "total": total_count,
+        "total_revenue": total_revenue,
+        "limit": limit,
+        "offset": offset,
+    }
 
 
 @router.post("/api/my/transactions/{tx_id}/toggle-status")

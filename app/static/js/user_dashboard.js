@@ -1,5 +1,5 @@
 // =============================================
-//   GHOST LEDGER — User Dashboard Logic
+//   SDCS LEDGER — User Dashboard Logic
 // =============================================
 
 const fmt = {
@@ -11,13 +11,20 @@ const fmt = {
   }
 };
 
-let currentPeriod = 'today';
-let customFrom = null;
-let customTo   = null;
+// ── Pagination state ──────────────────────────────────────────────────────────
+const PAGE_LIMIT    = 50;
+let currentOffset   = 0;
+let totalCount      = 0;
+let isLoadingMore   = false;
 
-// ── Build query string ────────────────────────────────────────────────────────
-function buildQS() {
-  let qs = `period=${currentPeriod}`;
+// ── Filter state ──────────────────────────────────────────────────────────────
+let currentPeriod = 'today';
+let customFrom    = null;
+let customTo      = null;
+
+// ── Build query string ─────────────────────────────────────────────────────────
+function buildQS(offset = 0) {
+  let qs = `period=${currentPeriod}&limit=${PAGE_LIMIT}&offset=${offset}`;
   if (customFrom) qs += `&from_date=${customFrom}`;
   if (customTo)   qs += `&to_date=${customTo}`;
   const search = document.getElementById('searchInput').value.trim();
@@ -38,41 +45,112 @@ async function loadStats() {
   } catch(e) { console.error('Stats error:', e); }
 }
 
-// ── Transactions ──────────────────────────────────────────────────────────────
+// ── Render a single transaction row ───────────────────────────────────────────
+function renderRow(tx) {
+  return `
+    <tr class="${tx.status === 'returned' ? 'opacity-80 bg-red-50/40 dark:bg-red-900/10' : ''}">
+      <td>${fmt.date(tx.created_at)}</td>
+      <td>${esc(tx.item || '—')}</td>
+      <td>${tx.quantity != null ? tx.quantity + (tx.unit ? ' ' + tx.unit : '') : '—'}</td>
+      <td class="${tx.status === 'returned' ? 'line-through text-red-500 font-medium' : 'font-medium'}">${fmt.currency(tx.amount)}</td>
+      <td>${esc(tx.customer || '—')}</td>
+      <td>${esc(tx.recorded_by || '—')}</td>
+      <td>
+          <div class="flex items-center gap-2">
+              ${tx.status === 'returned'
+                  ? '<span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">Refunded</span>'
+                  : '<span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">Recorded</span>'}
+              <button onclick="toggleTxStatus(${tx.id})" title="Toggle Return Status" class="p-1 text-gray-400 hover:text-gray-900 hover:bg-gray-200 dark:hover:bg-slate-600 dark:hover:text-white rounded transition">
+                  <i class="ph ph-arrow-u-down-left text-lg"></i>
+              </button>
+          </div>
+      </td>
+    </tr>
+  `;
+}
+
+// ── Load More button state helper ─────────────────────────────────────────────
+function syncLoadMoreBtn() {
+  const btn = document.getElementById('load-more-btn');
+  const wrap = document.getElementById('load-more-wrap');
+  if (!btn || !wrap) return;
+
+  const loaded = currentOffset; // offset = count already shown
+  if (loaded >= totalCount) {
+    wrap.classList.remove('hidden');
+    btn.disabled = true;
+    btn.textContent = 'All records loaded';
+    btn.className = 'w-full py-3 text-sm font-semibold text-gray-400 dark:text-gray-500 cursor-default';
+  } else {
+    wrap.classList.remove('hidden');
+    btn.disabled = false;
+    const remaining = totalCount - loaded;
+    btn.textContent = `Load More (${remaining} remaining)`;
+    btn.className = 'w-full py-3 text-sm font-semibold text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-900/40 transition';
+  }
+}
+
+// ── Transactions — initial load (replaces table) ───────────────────────────────
 async function loadTransactions() {
+  currentOffset = 0;
   const tbody = document.getElementById('ledger-body');
-  tbody.innerHTML = `<tr><td colspan="7" class="loading-state">Loading…</td></tr>`;
+  tbody.innerHTML = `<tr><td colspan="7" class="text-center py-12 text-gray-400 dark:text-gray-500 text-sm">Loading…</td></tr>`;
+  // Hide load-more while fetching first page
+  const wrap = document.getElementById('load-more-wrap');
+  if (wrap) wrap.classList.add('hidden');
+
   try {
-    const r = await fetch(`/api/my/transactions?${buildQS()}`);
+    const r = await fetch(`/api/my/transactions?${buildQS(0)}`);
     if (r.status === 401) { location.href = '/my-ledger'; return; }
     const data = await r.json();
+
+    totalCount    = data.total;
+    currentOffset = data.items.length;
+
     if (!data.items || data.items.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" class="loading-state">No transactions found for this period.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" class="text-center py-12 text-gray-400 dark:text-gray-500 text-sm">No transactions found for this period.</td></tr>`;
+      syncLoadMoreBtn();
       return;
     }
-    tbody.innerHTML = data.items.map(tx => `
-      <tr class="${tx.status === 'returned' ? 'opacity-80 bg-red-50/40 dark:bg-red-900/10' : ''}">
-        <td>${fmt.date(tx.created_at)}</td>
-        <td>${esc(tx.item || '—')}</td>
-        <td>${tx.quantity != null ? tx.quantity + (tx.unit ? ' ' + tx.unit : '') : '—'}</td>
-        <td class="${tx.status === 'returned' ? 'line-through text-red-500 font-medium' : 'font-medium'}">${fmt.currency(tx.amount)}</td>
-        <td>${esc(tx.customer || '—')}</td>
-        <td>${esc(tx.recorded_by || '—')}</td>
-        <td>
-            <div class="flex items-center gap-2">
-                ${tx.status === 'returned' 
-                    ? '<span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">Refunded</span>'
-                    : '<span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">Recorded</span>'}
-                <button onclick="toggleTxStatus(${tx.id})" title="Toggle Return Status" class="p-1 text-gray-400 hover:text-gray-900 hover:bg-gray-200 dark:hover:bg-slate-600 dark:hover:text-white rounded transition">
-                    <i class="ph ph-arrow-u-down-left text-lg"></i>
-                </button>
-            </div>
-        </td>
-      </tr>
-    `).join('');
+
+    tbody.innerHTML = data.items.map(renderRow).join('');
+    syncLoadMoreBtn();
   } catch(e) {
     console.error('Transactions error:', e);
-    document.getElementById('ledger-body').innerHTML = `<tr><td colspan="7" class="loading-state">⚠️ Failed to load transactions.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center py-10 text-red-400 text-sm">⚠️ Failed to load transactions.</td></tr>`;
+  }
+}
+
+// ── Load More — appends next page ─────────────────────────────────────────────
+async function loadMore() {
+  if (isLoadingMore || currentOffset >= totalCount) return;
+  isLoadingMore = true;
+
+  const btn = document.getElementById('load-more-btn');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'Loading…';
+  }
+
+  try {
+    const r = await fetch(`/api/my/transactions?${buildQS(currentOffset)}`);
+    if (r.status === 401) { location.href = '/my-ledger'; return; }
+    const data = await r.json();
+
+    totalCount = data.total;
+
+    if (data.items && data.items.length > 0) {
+      const tbody = document.getElementById('ledger-body');
+      tbody.insertAdjacentHTML('beforeend', data.items.map(renderRow).join(''));
+      currentOffset += data.items.length;
+    }
+
+    syncLoadMoreBtn();
+  } catch(e) {
+    console.error('Load more error:', e);
+    if (btn) btn.textContent = '⚠️ Failed. Try again.';
+  } finally {
+    isLoadingMore = false;
   }
 }
 
@@ -82,7 +160,7 @@ function esc(str) {
   return d.innerHTML;
 }
 
-// ── Status Engine ─────────────────────────────────────────────────────────────
+// ── Status toggle ─────────────────────────────────────────────────────────────
 async function toggleTxStatus(txId) {
     if (!confirm("Confirm changing this transaction's status?")) return;
     try {
@@ -118,7 +196,7 @@ function applyDateRange() {
   if (!from && !to) return;
   customFrom = from || null;
   customTo   = to   || null;
-  currentPeriod = 'all'; // override period when custom date is used
+  currentPeriod = 'all';
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   refresh();
 }
@@ -128,7 +206,6 @@ function openEntryModal() {
     const modal = document.getElementById('entry-modal');
     const content = document.getElementById('entry-modal-content');
     modal.classList.remove('hidden');
-    // slight delay for animation
     setTimeout(() => {
         content.classList.remove('scale-95', 'opacity-0');
         content.classList.add('scale-100', 'opacity-100');
@@ -140,7 +217,6 @@ function closeEntryModal() {
     const content = document.getElementById('entry-modal-content');
     content.classList.remove('scale-100', 'opacity-100');
     content.classList.add('scale-95', 'opacity-0');
-    // wait for transition
     setTimeout(() => {
         modal.classList.add('hidden');
         document.getElementById('add-entry-form').reset();
@@ -169,7 +245,7 @@ document.getElementById('add-entry-form')?.addEventListener('submit', async (e) 
         });
         if (!res.ok) throw new Error('Failed to save');
         closeEntryModal();
-        refresh(); // update visually immediately
+        refresh();
     } catch(err) {
         console.error(err);
         alert('Failed to save transaction: ' + err.message);
@@ -184,14 +260,14 @@ function triggerExport(type='csv') {
   window.location.href = `/api/my/export/${type}?${buildQS()}`;
 }
 
-// ── Search ────────────────────────────────────────────────────────────────────
+// ── Search (debounced, resets pagination) ─────────────────────────────────────
 let searchTimer;
 document.getElementById('searchInput').addEventListener('input', () => {
   clearTimeout(searchTimer);
   searchTimer = setTimeout(refresh, 350);
 });
 
-// ── Refresh ───────────────────────────────────────────────────────────────────
+// ── Refresh (always resets to page 1) ────────────────────────────────────────
 function refresh() {
   loadStats();
   loadTransactions();
